@@ -18,7 +18,7 @@
 
 @end
 
-@interface SenceConfigViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,RenameViewDelegate,SenceConfigCellDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
+@interface SenceConfigViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,SenceConfigCellDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
     NSMutableData *responseData_;
 }

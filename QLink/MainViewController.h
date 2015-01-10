@@ -16,7 +16,7 @@
 #import "AFNetworking.h"
 #import "SimplePingHelper.h"
 
-@interface MainViewController : BaseViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,iConViewDelegate,UIAlertViewDelegate,IconViewControllerDelegate,RenameViewDelegate,SenceConfigViewControllerDelegate,SimplePingDelegate>
+@interface MainViewController : BaseViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,iConViewDelegate,UIAlertViewDelegate,IconViewControllerDelegate,SenceConfigViewControllerDelegate,SimplePingDelegate>
 
 @property (strong, nonatomic) REMenu *menu;
 

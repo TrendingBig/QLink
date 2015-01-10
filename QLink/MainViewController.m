@@ -10,7 +10,6 @@
 #import "ILBarButtonItem.h"
 #import "REMenuItem.h"
 #import "KxMenu.h"
-#import "MyAlertView.h"
 #import "NetworkUtil.h"
 #import "RemoteViewController.h"
 #import "LightViewController.h"
@@ -19,6 +18,7 @@
 #import "SenceConfigViewController.h"
 #import "SVProgressHUD.h"
 #import "UIAlertView+MKBlockAdditions.h"
+#import "UIView+xib.h"
 
 #define kImageWidth  106 //UITableViewCell里面图片的宽度
 #define kImageHeight  106 //UITableViewCell里面图片的高度
@@ -35,12 +35,12 @@
     NSInteger senceRowCount_;
     NSInteger deviceRowCount_;
     
-    RenameView *renameView_;
-    
     int svHeight_;
     
     NSMutableArray *iconArr_;
 }
+@property(nonatomic,retain) RenameView *renameView;
+
 @end
 
 @implementation MainViewController
@@ -57,6 +57,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    senceArr_ = [NSMutableArray array];
+    deviceArr_ = [NSMutableArray array];
     
     [self initIconArr];
     
@@ -188,20 +191,13 @@
     _tvScene.dataSource = self;
     _tvDevice.delegate = self;
     _tvDevice.dataSource = self;
-    
-    NSArray *array1 = [[NSBundle mainBundle] loadNibNamed:@"RenameView" owner:self options:nil];
-    renameView_ = [array1 objectAtIndex:0];
-    renameView_.frame = CGRectMake(0, 0, 320, 320);
-    renameView_.delegate = self;
-    [renameView_.tfContent setValue:[NSNumber numberWithInt:10] forKey:PADDINGLEFT];
-    renameView_.hidden = YES;
-    [self.view addSubview:renameView_];
 }
 
 -(void)initSence
 {
     GlobalAttr *obj = [DataUtil shareInstanceToRoom];
-    senceArr_ = [NSMutableArray arrayWithArray:[SQLiteUtil getSenceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
+    [senceArr_ removeAllObjects];
+    [senceArr_ addObjectsFromArray:[SQLiteUtil getSenceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
     
     senceCount_ = [senceArr_ count];
     senceRowCount_ = senceCount_%3 == 0 ? senceCount_/3 : (senceCount_/3 + 1);
@@ -212,7 +208,8 @@
 -(void)initDevice:(BOOL)isAddSence
 {
     GlobalAttr *obj = [DataUtil shareInstanceToRoom];
-    deviceArr_ = [NSMutableArray arrayWithArray:[SQLiteUtil getDeviceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
+    [deviceArr_ removeAllObjects];
+    [deviceArr_ addObjectsFromArray:[SQLiteUtil getDeviceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
     
     if (deviceArr_.count > 0 && isAddSence) {
         [deviceArr_ removeLastObject];
@@ -228,11 +225,13 @@
 {
     GlobalAttr *obj = [DataUtil shareInstanceToRoom];
     
-    senceArr_ = [NSMutableArray arrayWithArray:[SQLiteUtil getSenceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
+    [senceArr_ removeAllObjects];
+    [senceArr_ addObjectsFromArray:[SQLiteUtil getSenceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
     senceCount_ = [senceArr_ count];
     senceRowCount_ = senceCount_%3 == 0 ? senceCount_/3 : (senceCount_/3 + 1);
     
-    deviceArr_ = [NSMutableArray arrayWithArray:[SQLiteUtil getDeviceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
+    [deviceArr_ removeAllObjects];
+    [deviceArr_ addObjectsFromArray:[SQLiteUtil getDeviceList:obj.HouseId andLayerId:obj.LayerId andRoomId:obj.RoomId]];
     deviceCount_ = [deviceArr_ count];
     deviceRowCount_ = deviceCount_%3 == 0 ? deviceCount_/3 : (deviceCount_/3 + 1);
     
@@ -383,7 +382,7 @@
         }
         
         for (int i=0; i<3; i++) {
-            int index = 3*indexPath.row+i;
+            NSInteger index = 3*indexPath.row+i;
             if (index >= deviceCount_) {
                 break;
             }
@@ -428,25 +427,180 @@
 -(void)handleLongPressed:(int)index andType:(NSString *)pType
 {
     if ([pType isEqualToString:MACRO]) {//场景
-        MyAlertView *alert = [[MyAlertView alloc] initWithTitle:nil
-                                                        message:nil
-                                                       delegate:self
-                                              cancelButtonTitle:@"取消"
-                                              otherButtonTitles:@"重命名",@"图标重置",@"删除",@"编辑", nil];
-        alert.pIndex = index;
-        alert.pType = pType;
-        alert.tag = 101;
-        [alert show];
+        Sence *obj = [senceArr_ objectAtIndex:index];
+        define_weakself;
+        [UIAlertView alertViewWithTitle:@"温馨提示"
+                                message:nil
+                      cancelButtonTitle:@"取消"
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"编辑"]
+                              onDismiss:^(int btnIdx){
+                                  switch (btnIdx) {
+                                      case 0://重命名
+                                      {
+                                          self.renameView = [RenameView viewFromDefaultXib];
+                                          self.renameView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                          self.renameView.backgroundColor = [UIColor clearColor];
+                                          self.renameView.tfContent.text = obj.SenceName;
+                                          [self.renameView setCanclePressed:^{
+                                              [weakSelf.renameView removeFromSuperview];
+                                          }];
+                                          [self.renameView setConfirmPressed:^(UILabel *lTitle,NSString *newName){
+                                              NSString *sUrl = [NetworkUtil getChangeSenceName:newName andSenceId:obj.SenceId];
+                                              
+                                              NSURL *url = [NSURL URLWithString:sUrl];
+                                              NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+                                              NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+                                              NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+                                              if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                                                 [SQLiteUtil renameSenceName:obj.SenceId andNewName:newName];
+                                                  
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"更新成功"
+                                                                cancelButtonTitle:@"确定"];
+                                                  
+                                                  [weakSelf.renameView removeFromSuperview];
+                                                  
+                                                  [weakSelf initSence];
+                                              }else{
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"更新失败,请稍后再试."
+                                                                cancelButtonTitle:@"关闭"];
+                                              }
+                                          }];
+                                          [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.renameView];
+                                          
+                                          break;
+                                      }
+                                      case 1://图标重置
+                                      {
+                                          IconViewController *iconVC = [[IconViewController alloc] init];
+                                          iconVC.pDeviceId = obj.SenceId;
+                                          iconVC.pType = obj.Type;
+                                          iconVC.delegate = self;
+                                          [self.navigationController pushViewController:iconVC animated:YES];
+                                          
+                                          break;
+                                      }
+                                      case 2://删除
+                                      {
+                                          NSString *sUrl = [NetworkUtil getDelSence:obj.SenceId];;
+                                          
+                                          NSURL *url = [NSURL URLWithString:sUrl];
+                                          NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+                                          NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+                                          NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+                                          if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                                              [SQLiteUtil removeSence:obj.SenceId];
+                                              [self initSence];
+                                              
+                                              [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                      message:@"删除成功"
+                                                            cancelButtonTitle:@"确定"];
+                                              
+                                          }else{
+                                              [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                      message:@"删除失败.请稍后再试."
+                                                            cancelButtonTitle:@"关闭"];
+                                          }
+                                          
+                                          break;
+                                      }
+                                      case 3://编辑
+                                      {
+                                          [DataUtil setUpdateInsertSenceInfo:obj.SenceId andSenceName:obj.SenceName];
+                                        
+                                          SenceConfigViewController *configVC = [[SenceConfigViewController alloc] init];
+                                          configVC.delegate = self;
+                                          [self.navigationController pushViewController:configVC animated:YES];
+                                          break;
+                                    }
+                                      default:
+                                          break;
+                                  }
+        }onCancel:nil];
     } else{
-        MyAlertView *alert = [[MyAlertView alloc] initWithTitle:nil
-                                                        message:nil
-                                                       delegate:self
-                                              cancelButtonTitle:@"取消"
-                                              otherButtonTitles:@"重命名",@"图标重置",@"删除", nil];
-        alert.pIndex = index;
-        alert.pType = pType;
-        alert.tag = 101;
-        [alert show];
+        Device *obj = [deviceArr_ objectAtIndex:index];
+        define_weakself;
+        [UIAlertView alertViewWithTitle:@"操作"
+                                message:nil
+                      cancelButtonTitle:@"取消"
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除"]
+                              onDismiss:^(int buttonIndex){
+                                  switch (buttonIndex) {
+                                      case 0://重命名
+                                      {
+                                          self.renameView = [RenameView viewFromDefaultXib];
+                                          self.renameView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                          self.renameView.backgroundColor = [UIColor clearColor];
+                                          self.renameView.tfContent.text = obj.DeviceName;
+                                          [self.renameView setCanclePressed:^{
+                                              [weakSelf.renameView removeFromSuperview];
+                                          }];
+                                          [self.renameView setConfirmPressed:^(UILabel *lTitle,NSString *newName){
+                                              NSString *sUrl = [NetworkUtil getChangeDeviceName:newName andDeviceId:obj.DeviceId];
+                                              
+                                              NSURL *url = [NSURL URLWithString:sUrl];
+                                              NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+                                              NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+                                              NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+                                              if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                                                  [SQLiteUtil renameDeviceName:obj.DeviceId andNewName:newName];
+                                                  
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"更新成功"
+                                                                cancelButtonTitle:@"确定"];
+                                                  
+                                                  [weakSelf.renameView removeFromSuperview];
+                                                  
+                                                  [weakSelf initDevice:NO];
+                                              }else{
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"更新失败,请稍后再试."
+                                                                cancelButtonTitle:@"关闭"];
+                                              }
+                                          }];
+                                          [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.renameView];
+                                          
+                                          break;
+                                      }
+                                      case 1://图标重置
+                                      {
+                                          IconViewController *iconVC = [[IconViewController alloc] init];
+                                          iconVC.pDeviceId = obj.DeviceId;
+                                          iconVC.pType = obj.Type;
+                                          iconVC.delegate = self;
+                                          [self.navigationController pushViewController:iconVC animated:YES];
+                                          
+                                          break;
+                                      }
+                                      case 2://删除
+                                      {
+                                          NSString *sUrl = [NetworkUtil getDelDevice:obj.DeviceId];;
+                                          
+                                          NSURL *url = [NSURL URLWithString:sUrl];
+                                          NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+                                          NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+                                          NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+                                          if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                                              [SQLiteUtil removeDevice:obj.DeviceId];
+                                              [self initDevice:NO];
+                                              
+                                              [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                      message:@"删除成功"
+                                                            cancelButtonTitle:@"确定"];
+                                              
+                                          }else{
+                                              [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                      message:@"删除失败.请稍后再试."
+                                                            cancelButtonTitle:@"关闭"];
+                                          }
+                                          
+                                          break;
+                                      }
+                                      default:
+                                          break;
+                                  }
+        }onCancel:nil];
     }
 }
 
@@ -503,176 +657,6 @@
         [self initSence];
     }else{
         [self initDevice:NO];
-    }
-}
-
-#pragma mark -
-#pragma mark RenameViewDelegate
-
-//取消
--(void)handleCanclePressed
-{
-    [self hiddenRenameView];
-}
-
-//确定
--(void)handleConfirmPressed:(NSString *)deviceId
-                 andNewName:(NSString *)newName
-                    andType:(NSString *)pType
-{
-    NSString *sUrl = @"";
-    
-    if ([pType isEqualToString:MACRO]) {//场景
-        sUrl = [NetworkUtil getChangeSenceName:newName andSenceId:deviceId];
-    }else{//设备
-        sUrl = [NetworkUtil getChangeDeviceName:newName andDeviceId:deviceId];
-    }
-    
-    NSURL *url = [NSURL URLWithString:sUrl];
-    
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    
-    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
-    if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
-        
-        if ([pType isEqualToString:MACRO]) {
-            [SQLiteUtil renameSenceName:deviceId andNewName:newName];
-            [self initSence];
-        }else{
-            [SQLiteUtil renameDeviceName:deviceId andNewName:newName];
-            [self initDevice:NO];
-        }
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                        message:@"更新成功."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil, nil];
-        [alert show];
-        
-        [self hiddenRenameView];
-    
-    }else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                        message:@"更新失败,请稍后再试."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"关闭"
-                                              otherButtonTitles:nil, nil];
-        [alert show];
-    }
-}
-
-#pragma mark -
-#pragma mark UIAlertViewDelegate
-
-- (void)alertView:(MyAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == 101) {//长按
-        NSString *deviceId = @"";
-        NSString *deviceType = @"";
-        NSString *deviceName = @"";
-        
-        if ([alertView.pType isEqualToString:MACRO]) {
-            Sence *obj = [senceArr_ objectAtIndex:alertView.pIndex];
-            deviceId = obj.SenceId;
-            deviceType = obj.Type;
-            deviceName = obj.SenceName;
-        }else{
-            Device *obj = [deviceArr_ objectAtIndex:alertView.pIndex];
-            deviceId = obj.DeviceId;
-            deviceType = obj.Type;
-            deviceName = obj.DeviceName;
-        }
-        
-        switch (buttonIndex) {
-            case 1://重命名
-            {
-                renameView_.hidden = NO;
-                renameView_.tfContent.text = deviceName;
-                renameView_.pDeviceId = deviceId;
-                renameView_.pType = deviceType;
-                break;
-            }
-            case 2://重置图标
-            {
-                IconViewController *iconVC = [[IconViewController alloc] init];
-                iconVC.pDeviceId = deviceId;
-                iconVC.pType = deviceType;
-                iconVC.delegate = self;
-                [self.navigationController pushViewController:iconVC animated:YES];
-                
-                break;
-            }
-            case 3://删除
-            {
-                MyAlertView *alert = [[MyAlertView alloc] initWithTitle:@"温馨提示"
-                                                                message:@"确定要删除吗?"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"取消"
-                                                      otherButtonTitles:@"确定", nil];
-                alert.tag = 102;
-                alert.pType = deviceType;
-                alert.pDeviceId = deviceId;
-                [alert show];
-                
-                break;
-            }
-            case 4://编辑
-            {
-                [DataUtil setUpdateInsertSenceInfo:deviceId andSenceName:deviceName];
-                
-                SenceConfigViewController *configVC = [[SenceConfigViewController alloc] init];
-                configVC.delegate = self;
-                [self.navigationController pushViewController:configVC animated:YES];
-                break;
-            }
-            default:
-                break;
-        }
-    }else if(alertView.tag == 102){//删除
-        if (buttonIndex == 0) {
-            return;
-        }
-        
-        NSString *sUrl = @"";
-        if ([alertView.pType isEqualToString:MACRO]) {
-            sUrl = [NetworkUtil getDelSence:alertView.pDeviceId];
-        }else{
-            sUrl = [NetworkUtil getDelDevice:alertView.pDeviceId];
-        }
-        
-        NSURL *url = [NSURL URLWithString:sUrl];
-        
-        NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-        
-        NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-        NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
-        if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
-            
-            if ([alertView.pType isEqualToString:MACRO]) {
-                [SQLiteUtil removeSence:alertView.pDeviceId];
-                [self initSence];
-            }else{
-                [SQLiteUtil removeDevice:alertView.pDeviceId];
-                [self initDevice:NO];
-            }
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                            message:@"删除成功."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"确定"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
-            
-        }else{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                            message:@"删除失败.请稍后再试."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"关闭"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
-        }
     }
 }
 
@@ -901,13 +885,6 @@
         AboutViewController *aboutVC = [[AboutViewController alloc] init];
         [self.navigationController pushViewController:aboutVC animated:YES];
     }
-}
-
-//隐藏重命名浮层
--(void)hiddenRenameView
-{
-    renameView_.hidden = YES;
-    [renameView_.tfContent resignFirstResponder];
 }
 
 //取消场景模式

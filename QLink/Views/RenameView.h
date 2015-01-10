@@ -8,26 +8,29 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol RenameViewDelegate <NSObject>
+//@protocol RenameViewDelegate <NSObject>
+//
+//@optional
+//
+//-(void)handleCanclePressed;
+////场景设备确定 && 场景添加编辑确定事件
+//-(void)handleConfirmPressed:(NSString *)deviceId
+//                 andNewName:(NSString *)newName
+//                    andType:(NSString *)pType;
+////照明确定
+//-(void)handleConfirmPressed:(NSString *)deviceId
+//                 andNewName:(NSString *)newName
+//                    andLabel:(UILabel *)lTitle;
+//
+//@end
 
-@optional
+@interface RenameView : UIView
 
--(void)handleCanclePressed;
-//场景设备确定 && 场景添加编辑确定事件
--(void)handleConfirmPressed:(NSString *)deviceId
-                 andNewName:(NSString *)newName
-                    andType:(NSString *)pType;
-//照明确定
--(void)handleConfirmPressed:(NSString *)deviceId
-                 andNewName:(NSString *)newName
-                    andLabel:(UILabel *)lTitle;
-
-@end
-
-@interface RenameView : UIView<UITextFieldDelegate>
+@property (copy, nonatomic) void (^canclePressed)();
+@property (copy, nonatomic) void (^confirmPressed)(UILabel *lTitle,NSString *newName);
 
 @property(nonatomic,strong) IBOutlet UITextField *tfContent;
-@property(nonatomic,assign) id<RenameViewDelegate>delegate;
+//@property(nonatomic,assign) id<RenameViewDelegate>delegate;
 
 @property(nonatomic,strong) NSString *pDeviceId;
 @property(nonatomic,strong) NSString *pType;//设备类型（场景／设备）区分

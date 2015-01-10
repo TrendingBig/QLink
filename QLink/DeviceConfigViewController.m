@@ -129,14 +129,6 @@
              }
          }
          
-//         if ([sResult containsString:@"error"]) {
-//             NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
-//             if (errorArr.count > 1) {
-//                 [SVProgressHUD showErrorWithStatus:errorArr[1]];
-//                 return;
-//             }
-//         }
-         
          if (![DataUtil checkNullOrEmpty:sResult]) {
              if ([sResult isEqualToString:@"ok"]) {
                  ActionNullClass *actionNullClass = [[ActionNullClass alloc] init];

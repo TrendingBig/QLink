@@ -15,11 +15,12 @@
 #import "MyURLConnection.h"
 #import "SVProgressHUD.h"
 #import "UIAlertView+MKBlockAdditions.h"
+#import "UIView+xib.h"
 
 @interface SenceConfigViewController ()
 {
     NSMutableArray *senceConfigArr_;
-    RenameView *renameView_;
+
     NSArray *pickerArray_;
     
     UIButton *btnNumSel_;//记录所选行的数字按钮
@@ -32,6 +33,8 @@
     NSString *pDeviceName_;
     NSMutableArray *iconArr_;
 }
+
+@property(nonatomic,retain) RenameView *renameView;
 
 @end
 
@@ -91,14 +94,6 @@
     
     senceConfigArr_ = [NSMutableArray array];
     
-    NSArray *array1 = [[NSBundle mainBundle] loadNibNamed:@"RenameView" owner:self options:nil];
-    renameView_ = [array1 objectAtIndex:0];
-    renameView_.frame = CGRectMake(0, 0, 320, 320);
-    renameView_.delegate = self;
-    [renameView_.tfContent setValue:[NSNumber numberWithInt:10] forKey:PADDINGLEFT];
-    renameView_.hidden = YES;
-    [self.view addSubview:renameView_];
-    
     self.pickerViewNum.delegate = self;
     self.pickerViewNum.dataSource = self;
 }
@@ -134,16 +129,11 @@
         return;
     }
     
-    renameView_.hidden = NO;
-    renameView_.tfContent.text = pDeviceName_;
-
     orderIds_ = @"";
     times_ = @"";
     
     for (int i = 0; i < [senceConfigArr_ count]; i++) {
         Sence *obj = [senceConfigArr_ objectAtIndex:i];
-        
-        NSLog(@"==%@==%@\n",obj.OrderName,obj.Timer);
         
         if ([DataUtil checkNullOrEmpty:orderIds_]) {
             orderIds_ = obj.OrderId;
@@ -156,110 +146,132 @@
             times_ = [NSString stringWithFormat:@"%@,%@",times_,obj.Timer];
         }
     }
+    
+    self.renameView = [RenameView viewFromDefaultXib];
+    self.renameView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.renameView.backgroundColor = [UIColor clearColor];
+    self.renameView.tfContent.text = pDeviceName_;
+    define_weakself;
+    [self.renameView setCanclePressed:^{
+        [weakSelf.renameView removeFromSuperview];
+    }];
+    [self.renameView setConfirmPressed:^(UILabel *lTitle,NSString *newName){
+        [SVProgressHUD showWithStatus:@"请稍后..." maskType:SVProgressHUDMaskTypeClear];
+        
+        NSString *sUrl = [NetworkUtil getEditSence:pDeviceId_ andSenceName:newName andCmd:orderIds_ andTime:times_];
+        
+        NSURL *url = [NSURL URLWithString:sUrl];
+        
+        NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:50];
+        
+        define_weakself;
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             [DataUtil setGlobalIsAddSence:NO];
+             
+             NSString *sResult = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+             
+             NSRange range = [sResult rangeOfString:@"error"];
+             if (range.location != NSNotFound)
+             {
+                 NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
+                 if (errorArr.count > 1) {
+                     [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                     return;
+                 }
+             }
+             
+             NSString *ordercmd = [NSString stringWithFormat:@"%@|%@",orderIds_,times_];
+             NSArray *arr = [sResult componentsSeparatedByString:@","];
+             if ([arr count] > 1) {//新增
+                 if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
+                     Sence *obj = [[Sence alloc] init];
+                     obj.SenceId = [arr objectAtIndex:1];
+                     obj.SenceName = newName;
+                     obj.Macrocmd = [arr objectAtIndex:2];
+                     obj.CmdList = ordercmd;
+                     [SQLiteUtil insertSence:obj];
+                     
+                     //刷新数据库
+                     [SQLiteUtil removeShoppingCar];
+                     [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
+                     
+                     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
+                     
+                     Config *configObj = [Config getConfig];
+                     if (configObj.isBuyCenterControl) {
+                         //写入中控
+                         weakSelf.zkOperType = ZkOperSence;
+                         [weakSelf load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
+                     }else{
+                         //页面跳转
+                         NSArray * viewcontrollers = self.navigationController.viewControllers;
+                         int idxInStack = 0;
+                         for (int i=0; i<[viewcontrollers count]; i++) {
+                             if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
+                                 idxInStack = i;
+                                 break;
+                             }
+                         }
+                         
+                         [SVProgressHUD dismiss];
+                         
+                         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
+                     }
+                 } else {
+                     [SVProgressHUD showErrorWithStatus:@"添加场景失败"];
+                 }
+             } else { //编辑
+                 if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
+                     
+                     //更新数据库
+                     [SQLiteUtil updateCmdListBySenceId:pDeviceId_ andSenceName:newName andCmdList:ordercmd];
+                     
+                     [SQLiteUtil removeShoppingCar];
+                     [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
+                     
+                     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
+                     
+                     Config *configObj = [Config getConfig];
+                     if (configObj.isBuyCenterControl) {
+                         //写入中控
+                         weakSelf.zkOperType = ZkOperSence;
+                         [weakSelf load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
+                     }else{
+                         //页面跳转
+                         NSArray * viewcontrollers = self.navigationController.viewControllers;
+                         int idxInStack = 0;
+                         for (int i=0; i<[viewcontrollers count]; i++) {
+                             if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
+                                 idxInStack = i;
+                                 break;
+                             }
+                         }
+                         [SVProgressHUD dismiss];
+                         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
+                     }
+                 } else {
+                     [SVProgressHUD showErrorWithStatus:@"更新场景失败"];
+                 }
+             }
+             [weakSelf.renameView removeFromSuperview];
+         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             [SVProgressHUD dismiss];
+             
+             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                                 message:@"连接失败\n请确认网络是否连接." delegate:nil
+                                                       cancelButtonTitle:@"关闭"
+                                                       otherButtonTitles:nil, nil];
+             [alertView show];
+             
+         }];
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [queue addOperation:operation];
+    }];
+    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.renameView];
 }
-
-//#pragma mark -
-//#pragma mark NSURLConnection 回调方法
-//- (void)connection:(MyURLConnection *)connection didReceiveData:(NSData *)data
-//{
-//    [responseData_ appendData:data];
-//}
-//-(void) connection:(MyURLConnection *)connection didFailWithError: (NSError *)error
-//{
-//    NSLog(@"====fail");
-//    
-//    [connection cancel];
-//    
-//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-//                                                        message:@"连接失败\n请确认网络是否连接." delegate:nil
-//                                              cancelButtonTitle:@"关闭"
-//                                              otherButtonTitles:nil, nil];
-//    [alertView show];
-//
-//    [SVProgressHUD dismiss];
-//}
-//- (void)connectionDidFinishLoading: (MyURLConnection*)connection
-//{
-//    NSString *sResult = [[NSString alloc] initWithData:responseData_ encoding:NSUTF8StringEncoding];
-//    
-//    NSString *senceName = renameView_.tfContent.text;
-//    NSString *ordercmd = [NSString stringWithFormat:@"%@|%@",orderIds_,times_];
-//    
-//    NSArray *arr = [sResult componentsSeparatedByString:@","];
-//    if ([arr count] > 1) {//新增
-//        if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
-//            Sence *obj = [[Sence alloc] init];
-//            obj.SenceId = [arr objectAtIndex:1];
-//            obj.SenceName = senceName;
-//            obj.Macrocmd = [arr objectAtIndex:2];
-//            obj.CmdList = ordercmd;
-//            [SQLiteUtil insertSence:obj];
-//            
-//            //刷新数据库
-//            [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
-//            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
-//            
-//            Config *configObj = [Config getConfig];
-//            if (configObj.isBuyCenterControl) {
-//                //写入中控
-//                self.zkOperType = ZkOperSence;
-//                [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
-//            }else{
-//                //页面跳转
-//                NSArray * viewcontrollers = self.navigationController.viewControllers;
-//                int idxInStack = 0;
-//                for (int i=0; i<[viewcontrollers count]; i++) {
-//                    if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
-//                        idxInStack = i;
-//                        break;
-//                    }
-//                }
-//                [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
-//            }
-//        } else {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"添加场景失败" delegate:nil cancelButtonTitle:@"关闭" otherButtonTitles:nil, nil];
-//            [alert show];
-//        }
-//    } else { //编辑
-//        if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
-//            
-//            //更新数据库
-//            [SQLiteUtil updateCmdListBySenceId:pDeviceId_ andSenceName:senceName andCmdList:ordercmd];
-//            
-//            [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
-//            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
-//            
-//            Config *configObj = [Config getConfig];
-//            if (configObj.isBuyCenterControl) {
-//                //写入中控
-//                self.zkOperType = ZkOperSence;
-//                [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
-//            }else{
-//                //页面跳转
-//                NSArray * viewcontrollers = self.navigationController.viewControllers;
-//                int idxInStack = 0;
-//                for (int i=0; i<[viewcontrollers count]; i++) {
-//                    if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
-//                        idxInStack = i;
-//                        break;
-//                    }
-//                }
-//                [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
-//            }
-//            
-//        } else {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"更新场景失败" delegate:nil cancelButtonTitle:@"关闭" otherButtonTitles:nil, nil];
-//            [alert show];
-//        }
-//    }
-//    
-//    
-//    [self hiddenRenameView];
-//    
-//    [SVProgressHUD dismiss];
-//}
 
 #pragma mark -
 #pragma mark IBAction Methods
@@ -346,7 +358,7 @@
     
     [cell setIcon:type andDeviceName:obj.SenceName andOrderName:obj.OrderName andTime:obj.Timer];
     cell.pSenceObj = obj;
-    cell.lblNo.text = [NSString stringWithFormat:@"%d.",indexPath.row+1];
+    cell.lblNo.text = [NSString stringWithFormat:@"%ld.",indexPath.row+1];
     
     return cell;
 }
@@ -373,8 +385,6 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    NSLog(@"from:%d to %d",sourceIndexPath.row,destinationIndexPath.row);
-    
     //更新数据的顺序
     Sence *objToMove = [senceConfigArr_ objectAtIndex:sourceIndexPath.row];
     
@@ -394,156 +404,6 @@
 }
 -(NSString*) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     return [pickerArray_ objectAtIndex:row];
-}
-
-
-#pragma mark -
-#pragma mark RenameViewDelegate
-
-//取消
--(void)handleCanclePressed
-{
-    [self hiddenRenameView];
-}
-
-//确定
--(void)handleConfirmPressed:(NSString *)deviceId
-                 andNewName:(NSString *)newName
-                    andType:(NSString *)pType
-{
-    [SVProgressHUD showWithStatus:@"请稍后..." maskType:SVProgressHUDMaskTypeClear];
-    
-    NSString *sUrl = [NetworkUtil getEditSence:pDeviceId_ andSenceName:renameView_.tfContent.text andCmd:orderIds_ andTime:times_];
-    
-    NSURL *url = [NSURL URLWithString:sUrl];
-    
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:50];
-
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-//    define_weakself;
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         [DataUtil setGlobalIsAddSence:NO];
-         
-         NSString *sResult = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-
-         NSRange range = [sResult rangeOfString:@"error"];
-         if (range.location != NSNotFound)
-         {
-             NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
-             if (errorArr.count > 1) {
-                 [SVProgressHUD showErrorWithStatus:errorArr[1]];
-                 return;
-             }
-         }
-         
-//         if ([sResult containsString:@"error"]) {
-//             NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
-//             if (errorArr.count > 1) {
-//                 [SVProgressHUD showErrorWithStatus:errorArr[1]];
-//                 return;
-//             }
-//         }
-         
-         NSString *ordercmd = [NSString stringWithFormat:@"%@|%@",orderIds_,times_];
-         NSLog(@"%@-----%@",ordercmd,orderIds_);
-         NSArray *arr = [sResult componentsSeparatedByString:@","];
-         if ([arr count] > 1) {//新增
-             if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
-                 Sence *obj = [[Sence alloc] init];
-                 obj.SenceId = [arr objectAtIndex:1];
-                 obj.SenceName = newName;
-                 obj.Macrocmd = [arr objectAtIndex:2];
-                 obj.CmdList = ordercmd;
-                 [SQLiteUtil insertSence:obj];
-                 
-                 //刷新数据库
-                 [SQLiteUtil removeShoppingCar];
-                 [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
-                 
-                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
-                 
-                 Config *configObj = [Config getConfig];
-                 if (configObj.isBuyCenterControl) {
-                     //写入中控
-                     self.zkOperType = ZkOperSence;
-                     [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
-                 }else{
-                     //页面跳转
-                     NSArray * viewcontrollers = self.navigationController.viewControllers;
-                     int idxInStack = 0;
-                     for (int i=0; i<[viewcontrollers count]; i++) {
-                         if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
-                             idxInStack = i;
-                             break;
-                         }
-                     }
-                     
-                     [SVProgressHUD dismiss];
-                     
-                     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
-                 }
-             } else {
-                 [SVProgressHUD showErrorWithStatus:@"添加场景失败"];
-             }
-         } else { //编辑
-             if ([[[arr objectAtIndex:0] lowercaseString] isEqualToString:@"ok"]) {
-                 
-                 //更新数据库
-                 [SQLiteUtil updateCmdListBySenceId:pDeviceId_ andSenceName:newName andCmdList:ordercmd];
-                 
-                 [SQLiteUtil removeShoppingCar];
-                 [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
-                 
-                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSenceTab" object:nil];
-                 
-                 Config *configObj = [Config getConfig];
-                 if (configObj.isBuyCenterControl) {
-                     //写入中控
-                     self.zkOperType = ZkOperSence;
-                     [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
-                 }else{
-                     //页面跳转
-                     NSArray * viewcontrollers = self.navigationController.viewControllers;
-                     int idxInStack = 0;
-                     for (int i=0; i<[viewcontrollers count]; i++) {
-                         if ([[viewcontrollers objectAtIndex:i] isMemberOfClass:[MainViewController class]]) {
-                             idxInStack = i;
-                             break;
-                         }
-                     }
-                     [SVProgressHUD dismiss];
-                     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:idxInStack]animated:YES];
-                 }
-             } else {
-                 [SVProgressHUD showErrorWithStatus:@"更新场景失败"];
-             }
-         }
- 
-         [self hiddenRenameView];
-     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         [SVProgressHUD dismiss];
-         
-         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                             message:@"连接失败\n请确认网络是否连接." delegate:nil
-                                                   cancelButtonTitle:@"关闭"
-                                                   otherButtonTitles:nil, nil];
-         [alertView show];
-
-     }];
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperation:operation];
-    
-//    MyURLConnection *connection = [[MyURLConnection alloc]
-//                                   initWithRequest:request
-//                                   delegate:self];
-//
-//    if (connection) {
-//        responseData_ = [NSMutableData new];
-//    }
 }
 
 #pragma mark -
@@ -601,13 +461,6 @@
 
 #pragma mark -
 #pragma mark Custom Methods
-
-//隐藏重命名浮层
--(void)hiddenRenameView
-{
-    renameView_.hidden = YES;
-    [renameView_.tfContent resignFirstResponder];
-}
 
 -(void)btnBackPressed
 {

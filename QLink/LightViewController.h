@@ -14,6 +14,6 @@
 #import "LightBbView.h"
 #import "LightBriView.h"
 
-@interface LightViewController : BaseViewController<Sw1Delegate,RenameViewDelegate,LightBcViewDelegate,LightBbViewDelegate,LightBriViewDelegate>
+@interface LightViewController : BaseViewController<Sw1Delegate,LightBcViewDelegate,LightBbViewDelegate,LightBriViewDelegate>
 
 @end

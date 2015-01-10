@@ -9,7 +9,17 @@
 #import "RenameView.h"
 #import "DataUtil.h"
 
+@interface RenameView()<UITextFieldDelegate>
+
+@end
+
 @implementation RenameView
+
+-(void)awakeFromNib
+{
+    self.tfContent.delegate = self;
+    [self.tfContent setValue:[NSNumber numberWithInt:10] forKey:PADDINGLEFT];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -25,8 +35,11 @@
 
 -(IBAction)btnCanclePressed
 {
-    if (self.delegate) {
-        [self.delegate handleCanclePressed];
+//    if (self.delegate) {
+//        [self.delegate handleCanclePressed];
+//    }
+    if (self.canclePressed) {
+        self.canclePressed();
     }
 }
 
@@ -41,14 +54,18 @@
         
         return;
     }
-    
-    if (self.delegate) {
-        if (_lTitle) {//照明重命名
-            [self.delegate handleConfirmPressed:_pDeviceId andNewName:_tfContent.text andLabel:_lTitle];
-        }else{
-            [self.delegate handleConfirmPressed:_pDeviceId andNewName:_tfContent.text andType:_pType];
-        }
+
+    if (self.confirmPressed) {
+        self.confirmPressed(self.lTitle,self.tfContent.text);
     }
+    
+//    if (self.delegate) {
+//        if (_lTitle) {//照明重命名
+//            [self.delegate handleConfirmPressed:_pDeviceId andNewName:_tfContent.text andLabel:_lTitle];
+//        }else{
+//            [self.delegate handleConfirmPressed:_pDeviceId andNewName:_tfContent.text andType:_pType];
+//        }
+//    }
 }
 
 

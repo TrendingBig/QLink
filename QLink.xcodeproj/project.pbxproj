@@ -363,6 +363,7 @@
 		8A1FDBF31A5D7ED5004B1BBA /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A1FDBF21A5D7ED5004B1BBA /* RegisterViewController.xib */; };
 		8A206E8D1A39DD860018A634 /* MySlider+touch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A206E8C1A39DD860018A634 /* MySlider+touch.m */; };
 		8A20D8AA1A602B34004956E9 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A20D8A91A602B34004956E9 /* QLink.sqlite */; };
+		8A20D8DE1A603476004956E9 /* UIView+xib.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A20D8DD1A603476004956E9 /* UIView+xib.m */; };
 		8A21895819FAA821007980F0 /* success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A21895719FAA821007980F0 /* success@2x.png */; };
 		8A2256AD19E822A3009F7D03 /* sence_cancle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AB19E822A3009F7D03 /* sence_cancle.png */; };
 		8A2256AE19E822A3009F7D03 /* sence_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */; };
@@ -908,6 +909,8 @@
 		8A206E8B1A39DD860018A634 /* MySlider+touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MySlider+touch.h"; sourceTree = "<group>"; };
 		8A206E8C1A39DD860018A634 /* MySlider+touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MySlider+touch.m"; sourceTree = "<group>"; };
 		8A20D8A91A602B34004956E9 /* QLink.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = QLink.sqlite; sourceTree = "<group>"; };
+		8A20D8DC1A603476004956E9 /* UIView+xib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+xib.h"; sourceTree = "<group>"; };
+		8A20D8DD1A603476004956E9 /* UIView+xib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+xib.m"; sourceTree = "<group>"; };
 		8A21895719FAA821007980F0 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@2x.png"; sourceTree = "<group>"; };
 		8A2256AB19E822A3009F7D03 /* sence_cancle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sence_cancle.png; sourceTree = "<group>"; };
 		8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sence_cancle@2x.png"; sourceTree = "<group>"; };
@@ -1599,6 +1602,8 @@
 				8A20D8A91A602B34004956E9 /* QLink.sqlite */,
 				8A0738FE19DEEEE3001E6F45 /* DeviceConfigIconPlist.plist */,
 				35131F3619D4321E005A3C17 /* RemotePlist.plist */,
+				8A20D8DC1A603476004956E9 /* UIView+xib.h */,
+				8A20D8DD1A603476004956E9 /* UIView+xib.m */,
 				8A9D984919CE87C300D50CE6 /* MyURLConnection.h */,
 				8A9D984A19CE87C300D50CE6 /* MyURLConnection.m */,
 				8A97414B19CC877400E409A6 /* NetworkUtil.h */,
@@ -2519,6 +2524,7 @@
 				8A206E8D1A39DD860018A634 /* MySlider+touch.m in Sources */,
 				3574788219CD48E600A8E9FD /* SVProgressHUD.m in Sources */,
 				8AAC54C519F95F3A0094C2BC /* StudyTimerView.m in Sources */,
+				8A20D8DE1A603476004956E9 /* UIView+xib.m in Sources */,
 				8AAEE82D19C9CB0A00B01890 /* REMenuItemView.m in Sources */,
 				352F559B19D7FD630027EB38 /* LightViewController.m in Sources */,
 				8AA0108519CB2D61007D3E03 /* KxMenu.m in Sources */,
