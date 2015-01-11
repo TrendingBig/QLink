@@ -92,4 +92,10 @@
     return [NSString stringWithFormat:@"%@&action=savekfchang&dx=4&Id=%@",[self getBaseUrl],deviceId];
 }
 
+//设置设备IP
++(NSString *)geSetDeviceIp:(NSString *)deviceId andChangeVar:(NSString *)var
+{
+    return [NSString stringWithFormat:@"%@&action=savekfchang&dx=5&Id=%@&changvar=%@",[self getBaseUrl],deviceId,var];
+}
+
 @end

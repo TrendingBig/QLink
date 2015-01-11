@@ -19,6 +19,7 @@
 #import "SVProgressHUD.h"
 #import "UIAlertView+MKBlockAdditions.h"
 #import "UIView+xib.h"
+#import "SetIpView.h"
 
 #define kImageWidth  106 //UITableViewCell里面图片的宽度
 #define kImageHeight  106 //UITableViewCell里面图片的高度
@@ -40,6 +41,7 @@
     NSMutableArray *iconArr_;
 }
 @property(nonatomic,retain) RenameView *renameView;
+@property(nonatomic,retain) SetIpView *setIpView;
 
 @end
 
@@ -524,7 +526,7 @@
         [UIAlertView alertViewWithTitle:@"操作"
                                 message:nil
                       cancelButtonTitle:@"取消"
-                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除"]
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"设置IP"]
                               onDismiss:^(int buttonIndex){
                                   switch (buttonIndex) {
                                       case 0://重命名
@@ -595,6 +597,22 @@
                                                             cancelButtonTitle:@"关闭"];
                                           }
                                           
+                                          break;
+                                      }
+                                      case 3://设置IP
+                                      {
+                                          define_weakself;
+                                          self.setIpView = [SetIpView viewFromDefaultXib];
+                                          self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                          self.setIpView.backgroundColor = [UIColor clearColor];
+                                          self.setIpView.deviceId = obj.DeviceId;
+                                          [self.setIpView setCancleBlock:^{
+                                              [weakSelf.setIpView removeFromSuperview];
+                                          }];
+                                          [self.setIpView setComfirmBlock:^(NSString *ip) {
+                                          }];
+                                         
+                                          [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
                                           break;
                                       }
                                       default:

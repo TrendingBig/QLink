@@ -351,6 +351,12 @@
 		8A0738FF19DEEEE3001E6F45 /* DeviceConfigIconPlist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8A0738FE19DEEEE3001E6F45 /* DeviceConfigIconPlist.plist */; };
 		8A07390319DEF043001E6F45 /* DeviceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A07390119DEF043001E6F45 /* DeviceConfigViewController.m */; };
 		8A07390419DEF043001E6F45 /* DeviceConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A07390219DEF043001E6F45 /* DeviceConfigViewController.xib */; };
+		8A1302971A6169E300AB3941 /* SetIpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1302961A6169E300AB3941 /* SetIpView.m */; };
+		8A1302991A6169F300AB3941 /* SetIpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A1302981A6169F300AB3941 /* SetIpView.xib */; };
+		8A13029E1A616B5800AB3941 /* 复选框_未选中.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A13029A1A616B5800AB3941 /* 复选框_未选中.png */; };
+		8A13029F1A616B5800AB3941 /* 复选框_未选中@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A13029B1A616B5800AB3941 /* 复选框_未选中@2x.png */; };
+		8A1302A01A616B5800AB3941 /* 复选框_选中.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A13029C1A616B5800AB3941 /* 复选框_选中.png */; };
+		8A1302A11A616B5800AB3941 /* 复选框_选中@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A13029D1A616B5800AB3941 /* 复选框_选中@2x.png */; };
 		8A15D7D519F356BE002A2E41 /* SetupIpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7D419F356BE002A2E41 /* SetupIpViewController.m */; };
 		8A15D7DF19F36743002A2E41 /* SimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7DC19F36743002A2E41 /* SimplePing.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8A15D7E019F36743002A2E41 /* SimplePingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7DE19F36743002A2E41 /* SimplePingHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -891,6 +897,13 @@
 		8A07390019DEF043001E6F45 /* DeviceConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceConfigViewController.h; sourceTree = "<group>"; };
 		8A07390119DEF043001E6F45 /* DeviceConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceConfigViewController.m; sourceTree = "<group>"; };
 		8A07390219DEF043001E6F45 /* DeviceConfigViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceConfigViewController.xib; sourceTree = "<group>"; };
+		8A1302951A6169E300AB3941 /* SetIpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetIpView.h; sourceTree = "<group>"; };
+		8A1302961A6169E300AB3941 /* SetIpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetIpView.m; sourceTree = "<group>"; };
+		8A1302981A6169F300AB3941 /* SetIpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetIpView.xib; sourceTree = "<group>"; };
+		8A13029A1A616B5800AB3941 /* 复选框_未选中.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "复选框_未选中.png"; sourceTree = "<group>"; };
+		8A13029B1A616B5800AB3941 /* 复选框_未选中@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "复选框_未选中@2x.png"; sourceTree = "<group>"; };
+		8A13029C1A616B5800AB3941 /* 复选框_选中.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "复选框_选中.png"; sourceTree = "<group>"; };
+		8A13029D1A616B5800AB3941 /* 复选框_选中@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "复选框_选中@2x.png"; sourceTree = "<group>"; };
 		8A15D7D319F356BE002A2E41 /* SetupIpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupIpViewController.h; sourceTree = "<group>"; };
 		8A15D7D419F356BE002A2E41 /* SetupIpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupIpViewController.m; sourceTree = "<group>"; };
 		8A15D7DB19F36743002A2E41 /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
@@ -1719,6 +1732,9 @@
 				8AAC54A719F95F3A0094C2BC /* TrView.h */,
 				8AAC54A819F95F3A0094C2BC /* TrView.m */,
 				8AAC54A919F95F3A0094C2BC /* TrView.xib */,
+				8A1302951A6169E300AB3941 /* SetIpView.h */,
+				8A1302961A6169E300AB3941 /* SetIpView.m */,
+				8A1302981A6169F300AB3941 /* SetIpView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1881,6 +1897,10 @@
 				35A8A93419D166470018EB67 /* Device */,
 				35A8A97519D166470018EB67 /* Sence */,
 				35A4E56619D2DB16007A3C30 /* Button */,
+				8A13029A1A616B5800AB3941 /* 复选框_未选中.png */,
+				8A13029B1A616B5800AB3941 /* 复选框_未选中@2x.png */,
+				8A13029C1A616B5800AB3941 /* 复选框_选中.png */,
+				8A13029D1A616B5800AB3941 /* 复选框_选中@2x.png */,
 				8AAEE83319C9CC0500B01890 /* 登录页_bg.png */,
 				8AAEE83419C9CC0500B01890 /* 登录页_bg@2x.png */,
 				8AAEE83719C9CE9E00B01890 /* 登录页_logo.png */,
@@ -2098,6 +2118,7 @@
 				35131F1119D40940005A3C17 /* pl_leftmiddle02.png in Resources */,
 				35A4E57619D2DB16007A3C30 /* sw_ON02@2x.png in Resources */,
 				35A8A9D319D166470018EB67 /* openclose@2x.png in Resources */,
+				8A1302A11A616B5800AB3941 /* 复选框_选中@2x.png in Resources */,
 				35131EA719D3E5CD005A3C17 /* sw1_nav.png in Resources */,
 				35A8A9BB19D166470018EB67 /* delete@2x.png in Resources */,
 				8AAC54B619F95F3A0094C2BC /* LightBriView.xib in Resources */,
@@ -2224,6 +2245,7 @@
 				35131E5A19D3A760005A3C17 /* sd_top_right@2x.png in Resources */,
 				35A8A9D919D166470018EB67 /* other_select@2x.png in Resources */,
 				35A4E61919D2F9B7007A3C30 /* ot_right02.png in Resources */,
+				8A13029E1A616B5800AB3941 /* 复选框_未选中.png in Resources */,
 				8AAEE84A19C9D4E400B01890 /* 登录页_输入框01@2x.png in Resources */,
 				35A8AA0619D166470018EB67 /* macro_回家.png in Resources */,
 				35A8AA0B19D166470018EB67 /* macro_外出@2x.png in Resources */,
@@ -2262,6 +2284,7 @@
 				35A8A9DC19D166470018EB67 /* player_select.png in Resources */,
 				8A3D3D1319DC552D009A083E /* senceConfig_right02@2x.png in Resources */,
 				35A8A9C119D166470018EB67 /* door_close_select@2x.png in Resources */,
+				8A1302A01A616B5800AB3941 /* 复选框_选中.png in Resources */,
 				3543487C19D10B2900B53359 /* iConPlist.plist in Resources */,
 				8A3D3D0D19DC552D009A083E /* senceConfig_middle@2x.png in Resources */,
 				35A8A9BA19D166470018EB67 /* delete.png in Resources */,
@@ -2315,6 +2338,7 @@
 				35A8AA1319D166470018EB67 /* macro_机场@2x.png in Resources */,
 				35A4E5F219D2ECE7007A3C30 /* nm_right02.png in Resources */,
 				35A8AA1219D166470018EB67 /* macro_机场.png in Resources */,
+				8A13029F1A616B5800AB3941 /* 复选框_未选中@2x.png in Resources */,
 				35A8A9F619D166470018EB67 /* macro_上课.png in Resources */,
 				35131F1619D40940005A3C17 /* pl_lefttop02@2x.png in Resources */,
 				35A8A9B419D166470018EB67 /* add@2x.png in Resources */,
@@ -2324,6 +2348,7 @@
 				35A8AA3619D1685D0018EB67 /* alert_button@2x.png in Resources */,
 				35A8AA0419D166470018EB67 /* macro_休息_select.png in Resources */,
 				35A4E5BD19D2E048007A3C30 /* pd_middle@2x.png in Resources */,
+				8A1302991A6169F300AB3941 /* SetIpView.xib in Resources */,
 				8AD562ED19D7183C006E3285 /* sw2_top_off@2x.png in Resources */,
 				8A1ED4F819DA71AA0091DBB6 /* SANSAN_MACRO_ADD@2x.png in Resources */,
 				8AD562EE19D7183C006E3285 /* sw2_top_on.png in Resources */,
@@ -2509,6 +2534,7 @@
 				8AAC54B919F95F3A0094C2BC /* NmView.m in Sources */,
 				8AAEE82C19C9CB0A00B01890 /* REMenuItem.m in Sources */,
 				8A15D7DF19F36743002A2E41 /* SimplePing.m in Sources */,
+				8A1302971A6169E300AB3941 /* SetIpView.m in Sources */,
 				8A25548919EA1C360031B9F4 /* GCDAsyncUdpSocket.m in Sources */,
 				8A9D986719CEA58800D50CE6 /* FMDatabasePool.m in Sources */,
 				8A54F5A61A52FA420038896D /* AFHTTPRequestOperationManager.m in Sources */,

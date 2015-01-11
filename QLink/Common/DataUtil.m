@@ -36,6 +36,14 @@
     return NO;
 }
 
+//验证整数
++(BOOL)isPureInt:(NSString *)string
+{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    int val;
+    return [scan scanInt:&val] && [scan isAtEnd];
+}
+
 /*手机号码验证 MODIFIED BY HELENSONG*/
 +(BOOL) isValidateMobile:(NSString *)mobile
 {

@@ -16,6 +16,8 @@
 
 //检测是否为空
 +(BOOL)checkNullOrEmpty:(NSString *)str;
+//验证整数
++(BOOL)isPureInt:(NSString *)string;
 //验证手机号
 +(BOOL) isValidateMobile:(NSString *)mobile;
 

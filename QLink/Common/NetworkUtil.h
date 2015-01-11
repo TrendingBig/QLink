@@ -47,4 +47,7 @@
 //删除设备
 +(NSString *)getDelDevice:(NSString *)deviceId;
 
+//设置设备IP
++(NSString *)geSetDeviceIp:(NSString *)deviceId andChangeVar:(NSString *)var;
+
 @end
