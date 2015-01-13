@@ -10,6 +10,8 @@
 #import "DeviceInfoCell.h"
 #import "DataUtil.h"
 #import "ILBarButtonItem.h"
+#import "UIAlertView+MKBlockAdditions.h"
+#import "SetIpView.h"
 
 @interface DeviceInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -20,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblPort;
 
 @property(nonatomic,retain) NSArray *models;
+
+@property(nonatomic,retain) SetIpView *setIpView;
 
 @end
 
@@ -100,14 +104,36 @@
     }
     
     Order *obj = [self.models objectAtIndex:indexPath.row];
+    
+    NSString *orderValue = [DataUtil checkNullOrEmpty:obj.OrderCmd] ? @"暂无" : obj.OrderCmd;
     cell.lblOrderName.text = obj.OrderName;
-    cell.lblOrderValue.text = obj.OrderCmd;
+    cell.lblOrderValue.text = orderValue;
+    
+    //设置自动行数与字符换行
+    [cell.lblOrderValue setNumberOfLines:0];
+    cell.lblOrderValue.lineBreakMode = UILineBreakModeWordWrap;
+    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+    //设置一个行高上限
+    CGSize size = CGSizeMake(215,2000);
+    //计算实际frame大小，并将label的frame变成实际大小
+    CGSize labelsize = [orderValue sizeWithFont:font constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
+    int height = labelsize.height < 21 ? 21 : labelsize.height;
+    cell.lblOrderValue.frame = CGRectMake(76,37, 215, height);
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    Order *obj = [self.models objectAtIndex:indexPath.row];
+    
+    NSString *orderValue = [DataUtil checkNullOrEmpty:obj.OrderCmd] ? @"暂无" : obj.OrderCmd;
+    UIFont *font = [UIFont fontWithName:@"Arial" size:14];
+    //设置一个行高上限
+    CGSize size = CGSizeMake(215,2000);
+    //计算实际frame大小，并将label的frame变成实际大小
+    CGSize labelsize = [orderValue sizeWithFont:font constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
+    int height = labelsize.height < 21 ? 21 : labelsize.height;
+    return height + 45;
 }
 
 -(void)btnBackPressed

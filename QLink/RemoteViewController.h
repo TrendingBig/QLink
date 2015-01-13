@@ -21,7 +21,7 @@
 #import "REMenu.h"
 #import "StudyTimerView.h"
 
-@interface RemoteViewController : BaseViewController<SwViewDelegate,DtViewDelegate,McViewDelegate,PlViewDelegate,SdViewDelegate,OtViewDelegate,HsViewDelegate,NmViewDelegate,BsTcViewDelegate,TrViewDelegate,UIAlertViewDelegate,StudyTimerDelegate>
+@interface RemoteViewController : BaseViewController<SwViewDelegate,DtViewDelegate,McViewDelegate,PlViewDelegate,SdViewDelegate,OtViewDelegate,HsViewDelegate,NmViewDelegate,BsTcViewDelegate,TrViewDelegate,StudyTimerDelegate>
 
 @property(nonatomic,strong) NSString *deviceId;
 @property(nonatomic,strong) NSString *deviceName;

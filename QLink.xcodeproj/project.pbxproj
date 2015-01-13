@@ -375,6 +375,8 @@
 		8A22506F1A6554C800AD29DE /* DeviceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A22506E1A6554C800AD29DE /* DeviceInfoViewController.xib */; };
 		8A2250731A65572600AD29DE /* DeviceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A2250711A65572600AD29DE /* DeviceInfoCell.m */; };
 		8A2250741A65572600AD29DE /* DeviceInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A2250721A65572600AD29DE /* DeviceInfoCell.xib */; };
+		8A2250881A65759100AD29DE /* SetDeviceOrderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A2250871A65759100AD29DE /* SetDeviceOrderView.m */; };
+		8A22508A1A6575A500AD29DE /* SetDeviceOrderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */; };
 		8A2256AD19E822A3009F7D03 /* sence_cancle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AB19E822A3009F7D03 /* sence_cancle.png */; };
 		8A2256AE19E822A3009F7D03 /* sence_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */; };
 		8A25548819EA1C360031B9F4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */; };
@@ -935,6 +937,9 @@
 		8A2250701A65572600AD29DE /* DeviceInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfoCell.h; sourceTree = "<group>"; };
 		8A2250711A65572600AD29DE /* DeviceInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoCell.m; sourceTree = "<group>"; };
 		8A2250721A65572600AD29DE /* DeviceInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceInfoCell.xib; sourceTree = "<group>"; };
+		8A2250861A65759100AD29DE /* SetDeviceOrderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetDeviceOrderView.h; sourceTree = "<group>"; };
+		8A2250871A65759100AD29DE /* SetDeviceOrderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetDeviceOrderView.m; sourceTree = "<group>"; };
+		8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetDeviceOrderView.xib; sourceTree = "<group>"; };
 		8A2256AB19E822A3009F7D03 /* sence_cancle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sence_cancle.png; sourceTree = "<group>"; };
 		8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sence_cancle@2x.png"; sourceTree = "<group>"; };
 		8A25548419EA1C360031B9F4 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -1745,6 +1750,9 @@
 				8A1302951A6169E300AB3941 /* SetIpView.h */,
 				8A1302961A6169E300AB3941 /* SetIpView.m */,
 				8A1302981A6169F300AB3941 /* SetIpView.xib */,
+				8A2250861A65759100AD29DE /* SetDeviceOrderView.h */,
+				8A2250871A65759100AD29DE /* SetDeviceOrderView.m */,
+				8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2087,6 +2095,7 @@
 				35131E7119D3B048005A3C17 /* bstc_left.png in Resources */,
 				3574788119CD48E600A8E9FD /* SVProgressHUD.bundle in Resources */,
 				35131E5919D3A760005A3C17 /* sd_top_right.png in Resources */,
+				8A22508A1A6575A500AD29DE /* SetDeviceOrderView.xib in Resources */,
 				35A8A9EE19D166470018EB67 /* macro.png in Resources */,
 				35131ED019D4039A005A3C17 /* dt_bottom@2x.png in Resources */,
 				35A8A9B319D166470018EB67 /* add_select.png in Resources */,
@@ -2539,6 +2548,7 @@
 				8AAEE82919C9CB0A00B01890 /* ILBarButtonItem.m in Sources */,
 				8A9D984B19CE87C300D50CE6 /* MyURLConnection.m in Sources */,
 				8AAC54AE19F95F3A0094C2BC /* HsView.m in Sources */,
+				8A2250881A65759100AD29DE /* SetDeviceOrderView.m in Sources */,
 				8A378F7E19E0455B0089317B /* AboutViewController.m in Sources */,
 				8A9D986519CEA58800D50CE6 /* FMDatabase.m in Sources */,
 				8A9D985119CE8C6700D50CE6 /* XMLDictionary.m in Sources */,

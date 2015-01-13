@@ -50,4 +50,7 @@
 //设置设备IP
 +(NSString *)geSetDeviceIp:(NSString *)deviceId andChangeVar:(NSString *)var;
 
+//设置Order命令
++(NSString *)geSetDeviceOrder:(NSString *)deviceId andChangeVar:(NSString *)var andInputw:(NSString *)inputw;
+
 @end

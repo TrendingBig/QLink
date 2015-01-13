@@ -618,10 +618,43 @@
                                       }
                                       case 4://设备信息
                                       {
-                                          DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
-                                          vc.deviceName = obj.DeviceName;
-                                          vc.deviceId = obj.DeviceId;
-                                          [self.navigationController pushViewController:vc animated:YES];
+                                          NSArray *array = [SQLiteUtil getOrderListByDeviceId:obj.DeviceId];
+                                          if (array.count <= 0) {
+                                              return;
+                                          }
+                                          
+                                          Order *order = [array firstObject];
+                                          NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
+                                          if ([arrayOrderTips count] < 2) {
+                                              [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                      message:@"您还没有设置IP,现在设置?"
+                                                            cancelButtonTitle:@"取消"
+                                                            otherButtonTitles:@[@"确定"]
+                                                                    onDismiss:^(int buttonIndex) {
+                                                                        define_weakself;
+                                                                        self.setIpView = [SetIpView viewFromDefaultXib];
+                                                                        self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                                                        self.setIpView.backgroundColor = [UIColor clearColor];
+                                                                        self.setIpView.deviceId = obj.DeviceId;
+                                                                        [self.setIpView setCancleBlock:^{
+                                                                            [weakSelf.setIpView removeFromSuperview];
+                                                                        }];
+                                                                        [self.setIpView setComfirmBlock:^(NSString *ip) {
+                                                                        }];
+                                                                        
+                                                                        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+                                                                    }onCancel:^{
+                                                                        DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
+                                                                        vc.deviceName = obj.DeviceName;
+                                                                        vc.deviceId = obj.DeviceId;
+                                                                        [self.navigationController pushViewController:vc animated:YES];
+                                                                    }];
+                                          } else {
+                                              DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
+                                              vc.deviceName = obj.DeviceName;
+                                              vc.deviceId = obj.DeviceId;
+                                              [self.navigationController pushViewController:vc animated:YES];
+                                          }
                                           break;
                                       }
                                       default:

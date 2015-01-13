@@ -12,7 +12,6 @@
 
 +(instancetype)viewFromXib:(NSString *)xibName
 {
-
     UINib * nib = [UINib nibWithNibName:xibName bundle:nil];
     UIView * view  = [[nib instantiateWithOwner:nil options:nil] objectAtIndex:0];
     return view;

@@ -10,6 +10,10 @@
 #import "ILBarButtonItem.h"
 #import "SenceConfigViewController.h"
 #import "KxMenu.h"
+#import "SetIpView.h"
+#import "UIView+xib.h"
+#import "UIAlertView+MKBlockAdditions.h"
+#import "SetDeviceOrderView.h"
 
 #define JG 15
 
@@ -19,6 +23,10 @@
     StudyTimerView *studyTimerView_;
     NSString *strCurModel_;//记录当前的发送socket模式
 }
+
+@property(nonatomic,retain) SetIpView *setIpView;
+@property(nonatomic,retain) SetDeviceOrderView *setOrderView;
+
 @end
 
 @implementation RemoteViewController
@@ -78,6 +86,8 @@
                                        target:self
                                        action:@selector(showRightMenu)];
             self.navigationItem.rightBarButtonItem = rightBtn;
+        } else {
+            
         }
     }
 }
@@ -485,42 +495,42 @@
     
     if ([DataUtil getGlobalIsAddSence]) {//添加场景模式
         if ([SQLiteUtil getShoppingCarCount] >= 40) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                            message:@"最多添加40个命令,请删除后再添加."
-                                                           delegate:self
-                                                  cancelButtonTitle:@"确定"
-                                                  otherButtonTitles:nil, nil];
-            alert.tag = 101;
-            [alert show];
+            [UIAlertView alertViewWithTitle:@"温馨提示"
+                                    message:@"最多添加40个命令,请删除后再添加."
+                          cancelButtonTitle:@"确定" otherButtonTitles:nil
+                                  onDismiss:nil onCancel:^{
+                                      SenceConfigViewController *senceConfigVC = [[SenceConfigViewController alloc] init];
+                                      [self.navigationController pushViewController:senceConfigVC animated:YES];
+                                  }];
             return;
         }
         BOOL bResult = [SQLiteUtil addOrderToShoppingCar:sender.orderObj.OrderId andDeviceId:sender.orderObj.DeviceId];
-        if (bResult) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                            message:@"已成功添加命令,是否继续?"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"继续"
-                                                  otherButtonTitles:@"完成", nil];
-            alert.tag = 102;
-            [alert show];
+        if (bResult) {            [UIAlertView alertViewWithTitle:@"温馨提示"
+                                    message:@"已成功添加命令,是否继续?"
+                          cancelButtonTitle:@"继续" otherButtonTitles:@[@"完成"]
+                                  onDismiss:^(int buttonIdx){
+                                      SenceConfigViewController *senceConfigVC = [[SenceConfigViewController alloc] init];
+                                      [self.navigationController pushViewController:senceConfigVC animated:YES];
+            }onCancel:nil];
         }
     } else {
+        if ([[DataUtil getGlobalModel] isEqualToString:Model_SetOrder]) {//设置命令模式
+            
+            define_weakself;
+            self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
+            self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+            self.setOrderView.backgroundColor = [UIColor clearColor];
+//            self.setOrderView.deviceId = self.deviceId;
+//            self.setOrderView.orderCmd = sender.orderObj.OrderCmd;
+            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
+            
+            return;
+        }
         if ([[DataUtil getGlobalModel] isEqualToString:Model_Study]) {
             studyTimerView_.hidden = NO;
             [studyTimerView_ startTimer];
         }
         [self load_typeSocket:999 andOrderObj:sender.orderObj];
-    }
-}
-
-#pragma mark -
-#pragma mark UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if ((alertView.tag == 101 && buttonIndex == 0) || (alertView.tag == 102 && buttonIndex == 1)) {//完成
-        SenceConfigViewController *senceConfigVC = [[SenceConfigViewController alloc] init];
-        [self.navigationController pushViewController:senceConfigVC animated:YES];
     }
 }
 
@@ -556,6 +566,14 @@
       [KxMenuItem menuItem:@"学习模式"
                      image:nil
                     target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"设置IP模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"设置命令模式"
+                     image:nil
+                    target:self
                     action:@selector(pushMenuItem:)]
       ];
     
@@ -575,19 +593,42 @@
 {
     if ([sender.title isEqualToString:@"学习模式"])
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                        message:@"您已处于学习模式状态."
-                                                       delegate:self
-                                              cancelButtonTitle:@"确定"
-                                              otherButtonTitles:nil, nil];
-        alert.tag = 102;
-        [alert show];
+        [UIAlertView alertViewWithTitle:@"温馨提示"
+                                message:@"您已处于学习模式状态."
+                      cancelButtonTitle:@"确定"
+                      otherButtonTitles:nil
+                              onDismiss:nil
+                               onCancel:nil];
         
         [DataUtil setGlobalModel:Model_Study];
         
     } else if ([sender.title isEqualToString:@"正常模式"])
     {
         [DataUtil setGlobalModel:strCurModel_];
+    } else if ([sender.title isEqualToString:@"设置IP模式"])
+    {
+        define_weakself;
+        self.setIpView = [SetIpView viewFromDefaultXib];
+        self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        self.setIpView.backgroundColor = [UIColor clearColor];
+        self.setIpView.deviceId = self.deviceId;
+        [self.setIpView setCancleBlock:^{
+            [weakSelf.setIpView removeFromSuperview];
+        }];
+        [self.setIpView setComfirmBlock:^(NSString *ip) {
+        }];
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+    } else if ([sender.title isEqualToString:@"设置命令模式"])
+    {
+        [UIAlertView alertViewWithTitle:@"温馨提示"
+                                message:@"您已处于设置命令模式\n点击操作即可设置."
+                      cancelButtonTitle:@"确定"
+                      otherButtonTitles:nil
+                              onDismiss:nil
+                               onCancel:nil];
+        
+        [DataUtil setGlobalModel:Model_SetOrder];
     }
 }
 
