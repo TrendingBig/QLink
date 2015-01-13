@@ -11,6 +11,7 @@
 #import "UIAlertView+MKBlockAdditions.h"
 #import "SVProgressHUD.h"
 #import "NetworkUtil.h"
+#import "AFHTTPRequestOperation.h"
 
 @interface SetIpView()<UITextFieldDelegate>
 
@@ -104,7 +105,7 @@
         NSURL *url = [NSURL URLWithString:sUrl];
         NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
         NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-        NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+        NSString *sResult = [[NSString alloc]initWithData:received encoding:[DataUtil getGB2312Code]];
         if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
             [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功"];
             [self removeFromSuperview];
@@ -122,8 +123,6 @@
             }
             return;
         }
-        
-        
 //        self.comfirmBlock(ip);
     }
 }

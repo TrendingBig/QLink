@@ -360,6 +360,7 @@
 		8A15D7D519F356BE002A2E41 /* SetupIpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7D419F356BE002A2E41 /* SetupIpViewController.m */; };
 		8A15D7DF19F36743002A2E41 /* SimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7DC19F36743002A2E41 /* SimplePing.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8A15D7E019F36743002A2E41 /* SimplePingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A15D7DE19F36743002A2E41 /* SimplePingHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8A1AD2BA1A641E9900FEA537 /* DeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1AD2B91A641E9900FEA537 /* DeviceInfoViewController.m */; };
 		8A1ED4F719DA71AA0091DBB6 /* SANSAN_MACRO_ADD.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1ED4F319DA71AA0091DBB6 /* SANSAN_MACRO_ADD.png */; };
 		8A1ED4F819DA71AA0091DBB6 /* SANSAN_MACRO_ADD@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1ED4F419DA71AA0091DBB6 /* SANSAN_MACRO_ADD@2x.png */; };
 		8A1ED4F919DA71AA0091DBB6 /* SANSAN_MACRO_ADD_select.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1ED4F519DA71AA0091DBB6 /* SANSAN_MACRO_ADD_select.png */; };
@@ -371,6 +372,9 @@
 		8A20D8AA1A602B34004956E9 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A20D8A91A602B34004956E9 /* QLink.sqlite */; };
 		8A20D8DE1A603476004956E9 /* UIView+xib.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A20D8DD1A603476004956E9 /* UIView+xib.m */; };
 		8A21895819FAA821007980F0 /* success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A21895719FAA821007980F0 /* success@2x.png */; };
+		8A22506F1A6554C800AD29DE /* DeviceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A22506E1A6554C800AD29DE /* DeviceInfoViewController.xib */; };
+		8A2250731A65572600AD29DE /* DeviceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A2250711A65572600AD29DE /* DeviceInfoCell.m */; };
+		8A2250741A65572600AD29DE /* DeviceInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A2250721A65572600AD29DE /* DeviceInfoCell.xib */; };
 		8A2256AD19E822A3009F7D03 /* sence_cancle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AB19E822A3009F7D03 /* sence_cancle.png */; };
 		8A2256AE19E822A3009F7D03 /* sence_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */; };
 		8A25548819EA1C360031B9F4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */; };
@@ -910,6 +914,8 @@
 		8A15D7DC19F36743002A2E41 /* SimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePing.m; sourceTree = "<group>"; };
 		8A15D7DD19F36743002A2E41 /* SimplePingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePingHelper.h; sourceTree = "<group>"; };
 		8A15D7DE19F36743002A2E41 /* SimplePingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePingHelper.m; sourceTree = "<group>"; };
+		8A1AD2B81A641E9900FEA537 /* DeviceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfoViewController.h; sourceTree = "<group>"; };
+		8A1AD2B91A641E9900FEA537 /* DeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoViewController.m; sourceTree = "<group>"; };
 		8A1ED4F319DA71AA0091DBB6 /* SANSAN_MACRO_ADD.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SANSAN_MACRO_ADD.png; sourceTree = "<group>"; };
 		8A1ED4F419DA71AA0091DBB6 /* SANSAN_MACRO_ADD@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SANSAN_MACRO_ADD@2x.png"; sourceTree = "<group>"; };
 		8A1ED4F519DA71AA0091DBB6 /* SANSAN_MACRO_ADD_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SANSAN_MACRO_ADD_select.png; sourceTree = "<group>"; };
@@ -925,6 +931,10 @@
 		8A20D8DC1A603476004956E9 /* UIView+xib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+xib.h"; sourceTree = "<group>"; };
 		8A20D8DD1A603476004956E9 /* UIView+xib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+xib.m"; sourceTree = "<group>"; };
 		8A21895719FAA821007980F0 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@2x.png"; sourceTree = "<group>"; };
+		8A22506E1A6554C800AD29DE /* DeviceInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceInfoViewController.xib; sourceTree = "<group>"; };
+		8A2250701A65572600AD29DE /* DeviceInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfoCell.h; sourceTree = "<group>"; };
+		8A2250711A65572600AD29DE /* DeviceInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoCell.m; sourceTree = "<group>"; };
+		8A2250721A65572600AD29DE /* DeviceInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceInfoCell.xib; sourceTree = "<group>"; };
 		8A2256AB19E822A3009F7D03 /* sence_cancle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sence_cancle.png; sourceTree = "<group>"; };
 		8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sence_cancle@2x.png"; sourceTree = "<group>"; };
 		8A25548419EA1C360031B9F4 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -1821,6 +1831,12 @@
 				8A25549519EA453E0031B9F4 /* BaseViewController.m */,
 				8A15D7D319F356BE002A2E41 /* SetupIpViewController.h */,
 				8A15D7D419F356BE002A2E41 /* SetupIpViewController.m */,
+				8A1AD2B81A641E9900FEA537 /* DeviceInfoViewController.h */,
+				8A1AD2B91A641E9900FEA537 /* DeviceInfoViewController.m */,
+				8A22506E1A6554C800AD29DE /* DeviceInfoViewController.xib */,
+				8A2250701A65572600AD29DE /* DeviceInfoCell.h */,
+				8A2250711A65572600AD29DE /* DeviceInfoCell.m */,
+				8A2250721A65572600AD29DE /* DeviceInfoCell.xib */,
 			);
 			path = QLink;
 			sourceTree = "<group>";
@@ -2180,6 +2196,7 @@
 				35A8AA0119D166470018EB67 /* macro_下课_select@2x.png in Resources */,
 				35A8A9F319D166470018EB67 /* macro_上班@2x.png in Resources */,
 				35131F1219D40940005A3C17 /* pl_leftmiddle02@2x.png in Resources */,
+				8A22506F1A6554C800AD29DE /* DeviceInfoViewController.xib in Resources */,
 				35A4E56F19D2DB16007A3C30 /* sw_OFF.png in Resources */,
 				35A8A9CB19D166470018EB67 /* light_1_select@2x.png in Resources */,
 				35A4E5A719D2E048007A3C30 /* arpd_top02@2x.png in Resources */,
@@ -2209,6 +2226,7 @@
 				35A4E5A619D2E048007A3C30 /* arpd_top02.png in Resources */,
 				35131F1019D40940005A3C17 /* pl_leftmiddle@2x.png in Resources */,
 				8A3D3D0C19DC552D009A083E /* senceConfig_middle.png in Resources */,
+				8A2250741A65572600AD29DE /* DeviceInfoCell.xib in Resources */,
 				35131ED719D4039A005A3C17 /* dt_leftbottom.png in Resources */,
 				35131E5819D3A760005A3C17 /* sd_top_left02@2x.png in Resources */,
 				35A8A9B019D166470018EB67 /* ac_select.png in Resources */,
@@ -2541,6 +2559,7 @@
 				8AAEE85219C9D7EB00B01890 /* MainViewController.m in Sources */,
 				35A8A93319D1480A0018EB67 /* MyAlertView.m in Sources */,
 				8A1F45C219E0391100B19227 /* ActionNullClass.m in Sources */,
+				8A1AD2BA1A641E9900FEA537 /* DeviceInfoViewController.m in Sources */,
 				8A3035E01A4076FA00D9EFDC /* UIActionSheet+MKBlockAdditions.m in Sources */,
 				8AB5BEE619D0637000BC11EF /* IconViewController.m in Sources */,
 				8A54F5A51A52FA420038896D /* AFHTTPRequestOperation.m in Sources */,
@@ -2558,6 +2577,7 @@
 				35131F3519D42DF4005A3C17 /* OrderButton.m in Sources */,
 				8AAC54C319F95F3A0094C2BC /* SdView.m in Sources */,
 				8AAC54C119F95F3A0094C2BC /* RenameView.m in Sources */,
+				8A2250731A65572600AD29DE /* DeviceInfoCell.m in Sources */,
 				8A25549319EA36A90031B9F4 /* NSString+NSStringHexToBytes.m in Sources */,
 				8A3D3CF319DC3E7A009A083E /* SenceConfigViewController.m in Sources */,
 				8A9D986819CEA58800D50CE6 /* FMDatabaseQueue.m in Sources */,

@@ -20,6 +20,7 @@
 #import "UIAlertView+MKBlockAdditions.h"
 #import "UIView+xib.h"
 #import "SetIpView.h"
+#import "DeviceInfoViewController.h"
 
 #define kImageWidth  106 //UITableViewCell里面图片的宽度
 #define kImageHeight  106 //UITableViewCell里面图片的高度
@@ -361,7 +362,7 @@
             if (![iconArr_ containsObject:icon]) {
                 icon = @"other";
             }
-            [iconView setIcon:icon andTitle:obj.SenceName];
+            [iconView setIcon:icon andTitle:obj.SenceName andType:obj.Type];
             [iconView setValue:[NSNumber numberWithInt:index] forKey:@"index"];
             [iconView setValue:obj.Type forKey:@"pType"];
             
@@ -403,7 +404,7 @@
             if (![iconArr_ containsObject:icon]) {
                 icon = @"other";
             }
-            [iconView setIcon:icon andTitle:obj.DeviceName];
+            [iconView setIcon:icon andTitle:obj.DeviceName andType:obj.Type];
             [iconView setValue:[NSNumber numberWithInt:index] forKey:@"index"];
             [iconView setValue:obj.Type forKey:@"pType"];
             
@@ -434,7 +435,7 @@
         [UIAlertView alertViewWithTitle:@"温馨提示"
                                 message:nil
                       cancelButtonTitle:@"取消"
-                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"编辑"]
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"编辑",@"设备信息"]
                               onDismiss:^(int btnIdx){
                                   switch (btnIdx) {
                                       case 0://重命名
@@ -526,7 +527,7 @@
         [UIAlertView alertViewWithTitle:@"操作"
                                 message:nil
                       cancelButtonTitle:@"取消"
-                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"设置IP"]
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"设置IP",@"设备信息"]
                               onDismiss:^(int buttonIndex){
                                   switch (buttonIndex) {
                                       case 0://重命名
@@ -613,6 +614,14 @@
                                           }];
                                          
                                           [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+                                          break;
+                                      }
+                                      case 4://设备信息
+                                      {
+                                          DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
+                                          vc.deviceName = obj.DeviceName;
+                                          vc.deviceId = obj.DeviceId;
+                                          [self.navigationController pushViewController:vc animated:YES];
                                           break;
                                       }
                                       default:

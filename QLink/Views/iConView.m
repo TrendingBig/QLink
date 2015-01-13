@@ -19,7 +19,7 @@
     return self;
 }
 
--(void)setIcon:(NSString *)icon andTitle:(NSString *)title
+-(void)setIcon:(NSString *)icon andTitle:(NSString *)title andType:(NSString *)type
 {
     self.imgName = [icon stringByAppendingString:@".png"];
     self.imgNameSel = [icon stringByAppendingString:@"_select.png"];
@@ -39,7 +39,7 @@
     lTitle.font = [UIFont systemFontOfSize:FONTSIZE];
     [self addSubview:lTitle];
     
-    if (![icon isEqualToString:SANSANADDMACRO] && ![icon isEqualToString:@"light"] && ![icon isEqualToString:SANSANADDDEVICE]) {
+    if (![type isEqualToString:SANSANADDMACRO] && ![type isEqualToString:@"light"] && ![type isEqualToString:SANSANADDDEVICE]) {
         //实例化长按手势监听
         UILongPressGestureRecognizer *longPress =
         [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressed:)];

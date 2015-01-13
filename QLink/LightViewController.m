@@ -12,6 +12,7 @@
 #import "NetworkUtil.h"
 #import "UIView+xib.h"
 #import "UIAlertView+MKBlockAdditions.h"
+#import "SetIpView.h"
 
 @interface LightViewController ()
 {
@@ -19,6 +20,7 @@
 }
 
 @property(nonatomic,retain) RenameView *renameView;
+@property(nonatomic,retain) SetIpView *setIpView;
 
 @end
 
@@ -280,7 +282,7 @@
     [UIAlertView alertViewWithTitle:@"温馨提示"
                             message:nil
                   cancelButtonTitle:@"取消"
-                  otherButtonTitles:@[@"重命名",@"删除"]
+                  otherButtonTitles:@[@"重命名",@"删除",@"设置IP"]
                           onDismiss:^(int buttonIndex){
                               switch (buttonIndex) {
                                   case 0://重命名
@@ -360,6 +362,22 @@
                                                                 }
                                       }onCancel:nil];
                                       
+                                      break;
+                                  }
+                                  case 2:
+                                  {
+                                      define_weakself;
+                                      self.setIpView = [SetIpView viewFromDefaultXib];
+                                      self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                      self.setIpView.backgroundColor = [UIColor clearColor];
+                                      self.setIpView.deviceId = deviceId;
+                                      [self.setIpView setCancleBlock:^{
+                                          [weakSelf.setIpView removeFromSuperview];
+                                      }];
+                                      [self.setIpView setComfirmBlock:^(NSString *ip) {
+                                      }];
+                                      
+                                      [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
                                       break;
                                   }
                                   default:

@@ -24,6 +24,6 @@
 @property(nonatomic,strong) NSString *imgName;
 @property(nonatomic,strong) NSString *imgNameSel;
 
--(void)setIcon:(NSString *)icon andTitle:(NSString *)title;
+-(void)setIcon:(NSString *)icon andTitle:(NSString *)title andType:(NSString *)type;
 
 @end
