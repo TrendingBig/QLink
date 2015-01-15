@@ -10,7 +10,10 @@
 
 @interface SetDeviceOrderView : UIView
 
-@property(nonatomic,retain) NSString *deviceId;
+@property(nonatomic,strong) void(^confirmBlock)(NSString *orderCmd,NSString *address);
+@property(nonatomic,strong) void(^errorBlock)();
+
+@property(nonatomic,retain) NSString *orderId;
 @property(nonatomic,retain) NSString *orderCmd;
 
 @end

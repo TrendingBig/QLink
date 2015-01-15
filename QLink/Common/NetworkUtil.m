@@ -99,9 +99,9 @@
 }
 
 //设置Order命令
-+(NSString *)geSetDeviceOrder:(NSString *)deviceId andChangeVar:(NSString *)var andInputw:(NSString *)inputw
++(NSString *)geSetDeviceOrder:(NSString *)orderId andChangeVar:(NSString *)var andInputw:(NSString *)inputw
 {
-    return [NSString stringWithFormat:@"%@&action=savekfchang&dx=6&Id=%@&changvar=%@&Inputw=%@",[self getBaseUrl],deviceId,var,inputw];
+    return [NSString stringWithFormat:@"%@&action=savekfchang&dx=6&Id=%@&changvar=%@&Inputw=%@",[self getBaseUrl],orderId,var,inputw];
 }
 
 @end

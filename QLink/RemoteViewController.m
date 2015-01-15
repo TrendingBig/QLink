@@ -40,6 +40,13 @@
     return self;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [DataUtil setGlobalModel:strCurModel_];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -79,15 +86,20 @@
     self.navigationItem.titleView = btnTitle;
     
     if (![DataUtil getGlobalIsAddSence]) {
-        if ([SQLiteUtil isStudyModel:_deviceId]) {
+        if ([SQLiteUtil isStudyModel:_deviceId]) {//有学习模式的设备，显示5个菜单，其他则显示3个
             ILBarButtonItem *rightBtn =
             [ILBarButtonItem barItemWithImage:[UIImage imageNamed:@"首页_三横.png"]
                                 selectedImage:[UIImage imageNamed:@"首页_三横.png"]
                                        target:self
-                                       action:@selector(showRightMenu)];
+                                       action:@selector(showRightMenu5)];
             self.navigationItem.rightBarButtonItem = rightBtn;
         } else {
-            
+            ILBarButtonItem *rightBtn =
+            [ILBarButtonItem barItemWithImage:[UIImage imageNamed:@"首页_三横.png"]
+                                selectedImage:[UIImage imageNamed:@"首页_三横.png"]
+                                       target:self
+                                       action:@selector(showRightMenu3)];
+            self.navigationItem.rightBarButtonItem = rightBtn;
         }
     }
 }
@@ -520,8 +532,25 @@
             self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
             self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
             self.setOrderView.backgroundColor = [UIColor clearColor];
-//            self.setOrderView.deviceId = self.deviceId;
-//            self.setOrderView.orderCmd = sender.orderObj.OrderCmd;
+            self.setOrderView.orderId = sender.orderObj.OrderId;
+            self.setOrderView.orderCmd = sender.orderObj.OrderCmd;
+            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
+                sender.orderObj.OrderCmd = orderCmd;
+                sender.orderObj.Address = address;
+            }];
+            [self.setOrderView setErrorBlock:^{
+                weakSelf.setIpView = [SetIpView viewFromDefaultXib];
+                weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
+                weakSelf.setIpView.backgroundColor = [UIColor clearColor];
+                weakSelf.setIpView.deviceId = weakSelf.deviceId;
+                [weakSelf.setIpView setCancleBlock:^{
+                    [weakSelf.setIpView removeFromSuperview];
+                }];
+                [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
+                }];
+                
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+            }];
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
             
             return;
@@ -530,6 +559,7 @@
             studyTimerView_.hidden = NO;
             [studyTimerView_ startTimer];
         }
+        
         [self load_typeSocket:999 andOrderObj:sender.orderObj];
     }
 }
@@ -547,7 +577,7 @@
 #pragma mark Custom Methods
 
 //配置菜单
--(void)showRightMenu
+-(void)showRightMenu5
 {
     [_menu close];
     
@@ -563,15 +593,52 @@
                     target:self
                     action:@selector(pushMenuItem:)],
       
-      [KxMenuItem menuItem:@"学习模式"
+      [KxMenuItem menuItem:@"     学习模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@"设置IP模式"
+      [KxMenuItem menuItem:@"   设置IP模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@"设置命令模式"
+      [KxMenuItem menuItem:@" 设置命令模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)]
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentCenter;
+    
+    CGRect rect = CGRectMake(215, -50, 100, 50);
+    
+    [KxMenu showMenuInView:self.view
+                  fromRect:rect
+                 menuItems:menuItems];
+}
+
+//配置菜单
+-(void)showRightMenu3
+{
+    [_menu close];
+    
+    if ([KxMenu isOpen]) {
+        return [KxMenu dismissMenu];
+    }
+    
+    NSArray *menuItems =
+    @[
+      
+      [KxMenuItem menuItem:@"正常模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@"   设置IP模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      [KxMenuItem menuItem:@" 设置命令模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)]
@@ -591,8 +658,12 @@
 //点击下拉事件
 - (void)pushMenuItem:(KxMenuItem *)sender
 {
-    if ([sender.title isEqualToString:@"学习模式"])
+    if ([sender.title isEqualToString:@"正常模式"])
     {
+        [DataUtil setGlobalModel:strCurModel_];
+    } else if ([sender.title isEqualToString:@"     学习模式"])
+    {
+        [DataUtil setGlobalModel:strCurModel_];
         [UIAlertView alertViewWithTitle:@"温馨提示"
                                 message:@"您已处于学习模式状态."
                       cancelButtonTitle:@"确定"
@@ -601,12 +672,10 @@
                                onCancel:nil];
         
         [DataUtil setGlobalModel:Model_Study];
-        
-    } else if ([sender.title isEqualToString:@"正常模式"])
+    } else if ([sender.title isEqualToString:@"   设置IP模式"])
     {
         [DataUtil setGlobalModel:strCurModel_];
-    } else if ([sender.title isEqualToString:@"设置IP模式"])
-    {
+        
         define_weakself;
         self.setIpView = [SetIpView viewFromDefaultXib];
         self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -619,7 +688,7 @@
         }];
         
         [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
-    } else if ([sender.title isEqualToString:@"设置命令模式"])
+    } else if ([sender.title isEqualToString:@" 设置命令模式"])
     {
         [UIAlertView alertViewWithTitle:@"温馨提示"
                                 message:@"您已处于设置命令模式\n点击操作即可设置."

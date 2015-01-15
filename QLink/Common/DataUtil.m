@@ -963,6 +963,25 @@
     return orderArr;
 }
 
+//更改设备Order命令
++(BOOL)updateDeviceOrder:(NSString *)orderId
+              andAddress:(NSString *)address
+             andOrderCmd:(NSString *)orderCmd
+{
+    GlobalAttr *obj = [DataUtil shareInstanceToRoom];
+    NSString *sql = [NSString stringWithFormat:@"UPDATE ORDERS SET Address='%@' and orderCmd='%@' where OrderId='%@' and HouseId='%@' and LayerId='%@' and Roomid='%@'",address,orderCmd,orderId,obj.HouseId,obj.LayerId,obj.RoomId];
+    FMDatabase *db = [self getDB];
+    
+    [db open];
+    
+    BOOL bResult = [db executeUpdate:sql];
+    
+    [db close];
+    
+    return bResult;
+
+}
+
 //获取当前房间下所有的照明设备
 +(NSArray *)getLightDevice:(NSString *)houseId
                 andLayerId:(NSString *)layerId

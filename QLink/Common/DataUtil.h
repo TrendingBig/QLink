@@ -224,6 +224,11 @@
 //当前设备是否有学习模式
 +(BOOL)isStudyModel:(NSString *)deviceId;
 
+//更改设备Order命令
++(BOOL)updateDeviceOrder:(NSString *)orderId
+              andAddress:(NSString *)address
+             andOrderCmd:(NSString *)orderCmd;
+
 @end
 
 
