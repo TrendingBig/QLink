@@ -53,4 +53,12 @@
 //设置Order命令
 +(NSString *)geSetDeviceOrder:(NSString *)orderId andChangeVar:(NSString *)var andInputw:(NSString *)inputw;
 
+//重写中控
++(NSString *)geResetZK;
+//重设IP
++(NSString *)getResetIp:(NSString *)pwd;
+
+//请输入产品序列号（MAC）
++(NSString *)setNumber:(NSString *)number;
+
 @end

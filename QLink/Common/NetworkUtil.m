@@ -104,4 +104,22 @@
     return [NSString stringWithFormat:@"%@&action=savekfchang&dx=6&Id=%@&changvar=%@&Inputw=%@",[self getBaseUrl],orderId,var,inputw];
 }
 
+//重写中控
++(NSString *)geResetZK
+{
+    return [NSString stringWithFormat:@"%@&action=resetupzk",[self getBaseUrl]];
+}
+
+//重设IP
++(NSString *)getResetIp:(NSString *)pwd
+{
+    return [NSString stringWithFormat:@"%@&action=reip&password=%@",[self getBaseUrl],pwd];
+}
+
+//请输入产品序列号（MAC）
++(NSString *)setNumber:(NSString *)number
+{
+    return [NSString stringWithFormat:@"%@&action=snpudui&product_sn=%@",[self getBaseUrl],number];
+}
+
 @end

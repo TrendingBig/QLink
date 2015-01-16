@@ -15,6 +15,9 @@
 #import "ILBarButtonItem.h"
 #import "MainViewController.h"
 #import "AFHTTPRequestOperation.h"
+#import "NumberView.h"
+#import "SeriesNumberView.h"
+#import "UIView+xib.h"
 
 @interface DeviceConfigViewController ()
 {
@@ -27,6 +30,8 @@
     
     NSMutableArray *iconArr_;
 }
+
+@property(nonatomic,retain) SeriesNumberView *numberView;
 
 @end
 
@@ -78,6 +83,14 @@
                                action:@selector(btnBackPressed)];
     
     self.navigationItem.leftBarButtonItem = back;
+    
+//    UIBarButtonItem * btnSave = [[UIBarButtonItem alloc] initWithTitle:@"设置序列号" style:UIBarButtonItemStylePlain target:self action:@selector(actionAdd)];
+    ILBarButtonItem *add =
+    [ILBarButtonItem barItemWithImage:[UIImage imageNamed:@"SANSAN_DEVICE_ADD"]
+                        selectedImage:[UIImage imageNamed:@"SANSAN_DEVICE_ADD"]
+                               target:self
+                               action:@selector(actionAdd)];
+    self.navigationItem.rightBarButtonItem = add;
     
     UIButton *btnTitle = [UIButton buttonWithType:UIButtonTypeCustom];
     btnTitle.frame = CGRectMake(0, 0, 100, 20);
@@ -313,6 +326,19 @@
 
 #pragma mark -
 #pragma mark Custom Methods
+
+-(void)actionAdd
+{
+    define_weakself;
+    self.numberView = [SeriesNumberView viewFromDefaultXib];
+    self.numberView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.numberView.backgroundColor = [UIColor clearColor];
+    [self.numberView setComfirmBlock:^(NSString *ip) {
+        [weakSelf initRequest:[NetworkUtil getAction:ACTIONSETUP]];
+    }];
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.numberView];
+}
 
 -(void)btnIconPressed:(UIButton *)sender
 {

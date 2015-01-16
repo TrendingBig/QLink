@@ -123,7 +123,6 @@
             }
             return;
         }
-//        self.comfirmBlock(ip);
     }
 }
 

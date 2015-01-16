@@ -21,6 +21,7 @@
 #import "UIView+xib.h"
 #import "SetIpView.h"
 #import "DeviceInfoViewController.h"
+#import "ReSetIpView.h"
 
 #define kImageWidth  106 //UITableViewCell里面图片的宽度
 #define kImageHeight  106 //UITableViewCell里面图片的高度
@@ -43,6 +44,7 @@
 }
 @property(nonatomic,retain) RenameView *renameView;
 @property(nonatomic,retain) SetIpView *setIpView;
+@property(nonatomic,retain) ReSetIpView *resetIpView;
 
 @end
 
@@ -880,6 +882,14 @@
                                     image:nil
                                    target:self
                                    action:@selector(pushMenuItem:)],
+                     [KxMenuItem menuItem:@"重写中控"
+                                    image:nil
+                                   target:self
+                                   action:@selector(pushMenuItem:)],
+                     [KxMenuItem menuItem:@"重设IP"
+                                    image:nil
+                                   target:self
+                                   action:@selector(pushMenuItem:)],
                      
                      [KxMenuItem menuItem:@"关于"
                                     image:nil
@@ -887,6 +897,10 @@
                                    action:@selector(pushMenuItem:)], nil];
     } else {
         menuItems = [NSMutableArray arrayWithObjects:
+                     [KxMenuItem menuItem:@"重设IP"
+                                    image:nil
+                                   target:self
+                                   action:@selector(pushMenuItem:)],
                      [KxMenuItem menuItem:@"关于"
                                     image:nil
                                    target:self
@@ -944,6 +958,39 @@
     {
         AboutViewController *aboutVC = [[AboutViewController alloc] init];
         [self.navigationController pushViewController:aboutVC animated:YES];
+    } else if ([sender.title isEqualToString:@"重写中控"]) {
+        NSString *sUrl = [NetworkUtil geResetZK];
+        NSURL *url = [NSURL URLWithString:sUrl];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             NSString *sConfig = [[NSString alloc] initWithData:responseObject encoding:[DataUtil getGB2312Code]];
+             NSRange range = [sConfig rangeOfString:@"error"];
+             if (range.location != NSNotFound)
+             {
+                 NSArray *errorArr = [sConfig componentsSeparatedByString:@":"];
+                 if (errorArr.count > 1) {
+                     [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                     return;
+                 }
+             }
+             
+             [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功,重启应用后生效."];
+             
+         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置失败,请稍后再试."];
+         }];
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [queue addOperation:operation];
+    } else if([sender.title isEqualToString:@"重设IP"]) {
+        define_weakself;
+        self.resetIpView = [ReSetIpView viewFromDefaultXib];
+        self.resetIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        self.resetIpView.backgroundColor = [UIColor clearColor];
+        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.resetIpView];
     }
 }
 

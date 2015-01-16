@@ -389,6 +389,12 @@
 		8A2554BF19EA84900031B9F4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2554BE19EA84900031B9F4 /* CoreLocation.framework */; };
 		8A2554C119EA84B60031B9F4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2554C019EA84B60031B9F4 /* Security.framework */; };
 		8A2871A419E6D31F00875A92 /* MySlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A2871A319E6D31F00875A92 /* MySlider.m */; };
+		8A28EFA01A6955DC00AF16BF /* ReSetIpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A28EF9F1A6955DC00AF16BF /* ReSetIpView.m */; };
+		8A28EFA21A6955F400AF16BF /* ReSetIpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A28EFA11A6955F400AF16BF /* ReSetIpView.xib */; };
+		8A28EFA51A695E9E00AF16BF /* NumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A28EFA41A695E9E00AF16BF /* NumberView.m */; };
+		8A28EFA71A695EB300AF16BF /* NumberView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A28EFA61A695EB300AF16BF /* NumberView.xib */; };
+		8A28EFAA1A6962C800AF16BF /* SeriesNumberView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A28EFA91A6962C800AF16BF /* SeriesNumberView.xib */; };
+		8A28EFAD1A6962DE00AF16BF /* SeriesNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A28EFAC1A6962DE00AF16BF /* SeriesNumberView.m */; };
 		8A3035DF1A4076FA00D9EFDC /* NSObject+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3035DA1A4076FA00D9EFDC /* NSObject+MKBlockAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8A3035E01A4076FA00D9EFDC /* UIActionSheet+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3035DC1A4076FA00D9EFDC /* UIActionSheet+MKBlockAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8A3035E11A4076FA00D9EFDC /* UIAlertView+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3035DE1A4076FA00D9EFDC /* UIAlertView+MKBlockAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -957,6 +963,15 @@
 		8A2554C019EA84B60031B9F4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8A2871A219E6D31F00875A92 /* MySlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySlider.h; sourceTree = "<group>"; };
 		8A2871A319E6D31F00875A92 /* MySlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySlider.m; sourceTree = "<group>"; };
+		8A28EF9E1A6955DC00AF16BF /* ReSetIpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReSetIpView.h; sourceTree = "<group>"; };
+		8A28EF9F1A6955DC00AF16BF /* ReSetIpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReSetIpView.m; sourceTree = "<group>"; };
+		8A28EFA11A6955F400AF16BF /* ReSetIpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReSetIpView.xib; sourceTree = "<group>"; };
+		8A28EFA31A695E9E00AF16BF /* NumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumberView.h; sourceTree = "<group>"; };
+		8A28EFA41A695E9E00AF16BF /* NumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumberView.m; sourceTree = "<group>"; };
+		8A28EFA61A695EB300AF16BF /* NumberView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NumberView.xib; sourceTree = "<group>"; };
+		8A28EFA91A6962C800AF16BF /* SeriesNumberView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SeriesNumberView.xib; sourceTree = "<group>"; };
+		8A28EFAB1A6962DE00AF16BF /* SeriesNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeriesNumberView.h; sourceTree = "<group>"; };
+		8A28EFAC1A6962DE00AF16BF /* SeriesNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeriesNumberView.m; sourceTree = "<group>"; };
 		8A3035D81A4076FA00D9EFDC /* MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKBlockAdditions.h; sourceTree = "<group>"; };
 		8A3035D91A4076FA00D9EFDC /* NSObject+MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MKBlockAdditions.h"; sourceTree = "<group>"; };
 		8A3035DA1A4076FA00D9EFDC /* NSObject+MKBlockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MKBlockAdditions.m"; sourceTree = "<group>"; };
@@ -1753,6 +1768,15 @@
 				8A2250861A65759100AD29DE /* SetDeviceOrderView.h */,
 				8A2250871A65759100AD29DE /* SetDeviceOrderView.m */,
 				8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */,
+				8A28EF9E1A6955DC00AF16BF /* ReSetIpView.h */,
+				8A28EF9F1A6955DC00AF16BF /* ReSetIpView.m */,
+				8A28EFA11A6955F400AF16BF /* ReSetIpView.xib */,
+				8A28EFA31A695E9E00AF16BF /* NumberView.h */,
+				8A28EFA41A695E9E00AF16BF /* NumberView.m */,
+				8A28EFA61A695EB300AF16BF /* NumberView.xib */,
+				8A28EFAB1A6962DE00AF16BF /* SeriesNumberView.h */,
+				8A28EFAC1A6962DE00AF16BF /* SeriesNumberView.m */,
+				8A28EFA91A6962C800AF16BF /* SeriesNumberView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2149,6 +2173,7 @@
 				8AAC54B619F95F3A0094C2BC /* LightBriView.xib in Resources */,
 				35131F2819D40940005A3C17 /* pl_righttop@2x.png in Resources */,
 				35131F0C19D40940005A3C17 /* pl_leftbottom@2x.png in Resources */,
+				8A28EFAA1A6962C800AF16BF /* SeriesNumberView.xib in Resources */,
 				35A8AA0019D166470018EB67 /* macro_下课_select.png in Resources */,
 				8AAEE84919C9D4E400B01890 /* 登录页_输入框01.png in Resources */,
 				8A64BF1D19FB5BCA007DBF9D /* Icon-80.png in Resources */,
@@ -2228,6 +2253,7 @@
 				35131F1F19D40940005A3C17 /* pl_rightbottom.png in Resources */,
 				8A0738FB19DEEE63001E6F45 /* device_继电器02.png in Resources */,
 				8AAEE84C19C9D4E400B01890 /* 登录页_输入框02@2x.png in Resources */,
+				8A28EFA21A6955F400AF16BF /* ReSetIpView.xib in Resources */,
 				35131E4F19D3A760005A3C17 /* sd_bottom_right02.png in Resources */,
 				35A8A9E919D166470018EB67 /* ty_select@2x.png in Resources */,
 				35A8AA0219D166470018EB67 /* macro_休息.png in Resources */,
@@ -2437,6 +2463,7 @@
 				35131EDE19D4039A005A3C17 /* dt_middle02@2x.png in Resources */,
 				35A8A92C19D112180018EB67 /* iCon_底部按钮01_select@2x.png in Resources */,
 				35131EDB19D4039A005A3C17 /* dt_middle.png in Resources */,
+				8A28EFA71A695EB300AF16BF /* NumberView.xib in Resources */,
 				352F558819D7EB3D0027EB38 /* light_bb_down.png in Resources */,
 				35A8A9F419D166470018EB67 /* macro_上班_select.png in Resources */,
 				35A8A9D119D166470018EB67 /* ocpower_select@2x.png in Resources */,
@@ -2583,8 +2610,10 @@
 				8AAEE82D19C9CB0A00B01890 /* REMenuItemView.m in Sources */,
 				352F559B19D7FD630027EB38 /* LightViewController.m in Sources */,
 				8AA0108519CB2D61007D3E03 /* KxMenu.m in Sources */,
+				8A28EFAD1A6962DE00AF16BF /* SeriesNumberView.m in Sources */,
 				8AC7C1CB19EAB2CE001ACDBC /* NSData+NSDataBytesToHex.m in Sources */,
 				35131F3519D42DF4005A3C17 /* OrderButton.m in Sources */,
+				8A28EFA51A695E9E00AF16BF /* NumberView.m in Sources */,
 				8AAC54C319F95F3A0094C2BC /* SdView.m in Sources */,
 				8AAC54C119F95F3A0094C2BC /* RenameView.m in Sources */,
 				8A2250731A65572600AD29DE /* DeviceInfoCell.m in Sources */,
@@ -2610,6 +2639,7 @@
 				8A54F5AA1A52FA420038896D /* AFURLConnectionOperation.m in Sources */,
 				8A15D7D519F356BE002A2E41 /* SetupIpViewController.m in Sources */,
 				8A3035DF1A4076FA00D9EFDC /* NSObject+MKBlockAdditions.m in Sources */,
+				8A28EFA01A6955DC00AF16BF /* ReSetIpView.m in Sources */,
 				8AAEE82B19C9CB0A00B01890 /* REMenuContainerView.m in Sources */,
 				8AAC54CB19F95F3A0094C2BC /* TrView.m in Sources */,
 				8A9D986919CEA58800D50CE6 /* FMResultSet.m in Sources */,
