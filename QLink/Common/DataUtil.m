@@ -969,7 +969,7 @@
              andOrderCmd:(NSString *)orderCmd
 {
     GlobalAttr *obj = [DataUtil shareInstanceToRoom];
-    NSString *sql = [NSString stringWithFormat:@"UPDATE ORDERS SET Address='%@' and orderCmd='%@' where OrderId='%@' and HouseId='%@' and LayerId='%@' and Roomid='%@'",address,orderCmd,orderId,obj.HouseId,obj.LayerId,obj.RoomId];
+    NSString *sql = [NSString stringWithFormat:@"UPDATE ORDERS SET Address='%@', orderCmd='%@' where OrderId='%@' and HouseId='%@' and LayerId='%@' and Roomid='%@'",address,orderCmd,orderId,obj.HouseId,obj.LayerId,obj.RoomId];
     FMDatabase *db = [self getDB];
     
     [db open];

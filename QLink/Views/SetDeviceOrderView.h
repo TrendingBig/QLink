@@ -14,6 +14,6 @@
 @property(nonatomic,strong) void(^errorBlock)();
 
 @property(nonatomic,retain) NSString *orderId;
-@property(nonatomic,retain) NSString *orderCmd;
+@property (weak, nonatomic) IBOutlet UITextField *tfOrder;
 
 @end

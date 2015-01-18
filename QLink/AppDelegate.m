@@ -42,6 +42,8 @@
     
     [self checkDefaultCustom];
     
+    NSLog(@"------%@",[DataUtil getDirectoriesInDomains] );
+    
     return YES;
 }
 

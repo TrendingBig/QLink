@@ -13,7 +13,10 @@
 #import "LightBcView.h"
 #import "LightBbView.h"
 #import "LightBriView.h"
+#import "REMenu.h"
 
 @interface LightViewController : BaseViewController<Sw1Delegate,LightBcViewDelegate,LightBbViewDelegate,LightBriViewDelegate>
+
+@property (strong, nonatomic) REMenu *menu;
 
 @end

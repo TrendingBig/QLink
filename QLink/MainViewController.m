@@ -959,6 +959,9 @@
         AboutViewController *aboutVC = [[AboutViewController alloc] init];
         [self.navigationController pushViewController:aboutVC animated:YES];
     } else if ([sender.title isEqualToString:@"重写中控"]) {
+        
+        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
+        
         NSString *sUrl = [NetworkUtil geResetZK];
         NSURL *url = [NSURL URLWithString:sUrl];
         NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
@@ -977,10 +980,13 @@
                  }
              }
              
+             [SVProgressHUD dismiss];
+             
              [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功,重启应用后生效."];
              
          }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
              [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置失败,请稍后再试."];
+             [SVProgressHUD dismiss];
          }];
         
         NSOperationQueue *queue = [[NSOperationQueue alloc] init];

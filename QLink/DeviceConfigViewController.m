@@ -84,7 +84,6 @@
     
     self.navigationItem.leftBarButtonItem = back;
     
-//    UIBarButtonItem * btnSave = [[UIBarButtonItem alloc] initWithTitle:@"设置序列号" style:UIBarButtonItemStylePlain target:self action:@selector(actionAdd)];
     ILBarButtonItem *add =
     [ILBarButtonItem barItemWithImage:[UIImage imageNamed:@"SANSAN_DEVICE_ADD"]
                         selectedImage:[UIImage imageNamed:@"SANSAN_DEVICE_ADD"]
@@ -123,7 +122,6 @@
     [SVProgressHUD showWithStatus:@"加载中..." maskType:SVProgressHUDMaskTypeClear];
     
     NSURL *url = [NSURL URLWithString:sUrl];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     

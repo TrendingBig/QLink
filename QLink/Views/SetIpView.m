@@ -31,9 +31,11 @@
 {
     Control *control = [SQLiteUtil getControlObj];
     NSArray *array = [control.Ip componentsSeparatedByString:@"."];
-    self.tfCode1.text = array[0];
-    self.tfCode2.text = array[0];
-    self.tfCode3.text = array[0];
+    if (array.count > 3) {
+        self.tfCode1.text = array[0];
+        self.tfCode2.text = array[1];
+        self.tfCode3.text = array[2];
+    }
     
     self.tfCode1.delegate = self;
     self.tfCode2.delegate = self;
@@ -101,29 +103,45 @@
             ip = [NSString stringWithFormat:@"UDP:%@",ip];
         }
         
+        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
+        
         NSString *sUrl = [NetworkUtil geSetDeviceIp:_deviceId andChangeVar:ip];
         NSURL *url = [NSURL URLWithString:sUrl];
         NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-        NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-        NSString *sResult = [[NSString alloc]initWithData:received encoding:[DataUtil getGB2312Code]];
-        if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
-            [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功"];
-            [self removeFromSuperview];
-        } else {
-            NSRange range = [sResult rangeOfString:@"error"];
-            if (range.location != NSNotFound)
-            {
-                NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
-                if (errorArr.count > 1) {
-                    [SVProgressHUD showErrorWithStatus:errorArr[1]];
-                    return;
-                }
-            } else {
-                [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置失败,请稍后再试."];
-            }
-            return;
-        }
+        define_weakself;
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
+         {
+             NSString *sResult = [[NSString alloc]initWithData:responseObject encoding:[DataUtil getGB2312Code]];
+             if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                 [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功"];
+                 [weakSelf removeFromSuperview];
+                 [SVProgressHUD dismiss];
+             } else {
+                 NSRange range = [sResult rangeOfString:@"error"];
+                 if (range.location != NSNotFound)
+                 {
+                     NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
+                     if (errorArr.count > 1) {
+                         [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                         return;
+                     }
+                 } else {
+                     [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置失败,请稍后再试."];
+                     [SVProgressHUD dismiss];
+                 }
+                 return;
+             }
+         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             [SVProgressHUD dismiss];
+             [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置失败,请稍后再试."];
+         }];
+        
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [queue addOperation:operation];
     }
+    
+    
 }
 
 #pragma mark -

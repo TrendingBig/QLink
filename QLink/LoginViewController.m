@@ -187,13 +187,6 @@
 
 - (IBAction)btnRegister:(id)sender
 {
-//    [UIAlertView alertViewWithTitle:@"温馨提示"
-//                            message:@"即将跳转浏览器打开QLINK网站\n须从站点注册(需要邀请码)"
-//                  cancelButtonTitle:@"取消"
-//                  otherButtonTitles:@[@"确定"]
-//                          onDismiss:^(int index){
-//                              [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://qlink.cc/?action=apple"]];
-//                          }onCancel:nil];
     RegisterViewController *registerVC = [[RegisterViewController alloc] init];
     registerVC.loginVC = self;
     [self.navigationController pushViewController:registerVC animated:YES];
@@ -241,12 +234,13 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFPropertyListResponseSerializer serializer];
     __weak __typeof(self)weakSelf = self;
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          NSString *strResult = operation.responseString;
-         if ([strResult containsString:@"error"]) {
+         NSRange range = [strResult rangeOfString:@"error"];
+         if (range.location != NSNotFound)
+         {
              NSArray *errorArr = [strResult componentsSeparatedByString:@":"];
              if (errorArr.count > 1) {
                  [SVProgressHUD showErrorWithStatus:errorArr[1]];
@@ -255,7 +249,7 @@
          }
          
          [weakSelf requestSetUpIp];
-         
+
      }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          [weakSelf actionNULL];
      }];
@@ -268,7 +262,6 @@
 {
     NSString *sUrl = [NetworkUtil getSetUpIp:_tfName.text andPwd:_tfPassword.text andKey:_tfKey.text];
     NSURL *url = [NSURL URLWithString:sUrl];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     

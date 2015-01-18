@@ -12,10 +12,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fbj-Ze-O9D">
-                    <rect key="frame" x="0.0" y="125" width="320" height="281"/>
+                    <rect key="frame" x="0.0" y="82" width="320" height="281"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="alert_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="Qzo-Rl-dml">
-                            <rect key="frame" x="20" y="41" width="280" height="193"/>
+                            <rect key="frame" x="20" y="36" width="280" height="193"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="输入IP地址&amp;端口号" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XmM-Ub-cie">
                             <rect key="frame" x="87" y="62" width="146" height="21"/>

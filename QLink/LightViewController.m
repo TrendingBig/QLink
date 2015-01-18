@@ -13,14 +13,18 @@
 #import "UIView+xib.h"
 #import "UIAlertView+MKBlockAdditions.h"
 #import "SetIpView.h"
+#import "SetDeviceOrderView.h"
+#import "KxMenu.h"
 
 @interface LightViewController ()
 {
     UIScrollView *svBg_;
+    NSString *strCurModel_;//记录当前的发送socket模式
 }
 
 @property(nonatomic,retain) RenameView *renameView;
 @property(nonatomic,retain) SetIpView *setIpView;
+@property(nonatomic,retain) SetDeviceOrderView *setOrderView;
 
 @end
 
@@ -33,6 +37,13 @@
         // Custom initialization
     }
     return self;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [DataUtil setGlobalModel:strCurModel_];
 }
 
 - (void)viewDidLoad
@@ -56,6 +67,13 @@
                                action:@selector(btnBackPressed)];
     
     self.navigationItem.leftBarButtonItem = back;
+    
+    ILBarButtonItem *rightBtn =
+    [ILBarButtonItem barItemWithImage:[UIImage imageNamed:@"首页_三横.png"]
+                        selectedImage:[UIImage imageNamed:@"首页_三横.png"]
+                               target:self
+                               action:@selector(showRightMenu)];
+    self.navigationItem.rightBarButtonItem = rightBtn;
     
     UIButton *btnTitle = [UIButton buttonWithType:UIButtonTypeCustom];
     btnTitle.frame = CGRectMake(0, 0, 100, 20);
@@ -83,6 +101,8 @@
 
 -(void)initData
 {
+    strCurModel_ = [DataUtil getGlobalModel];
+    
     for (UIView *view in svBg_.subviews) {
         [view removeFromSuperview];
     }
@@ -417,12 +437,93 @@
             }onCancel:nil];
         }
     } else {
+        if ([[DataUtil getGlobalModel] isEqualToString:Model_SetOrder]) {//设置命令模式
+            
+            define_weakself;
+            self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
+            self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+            self.setOrderView.backgroundColor = [UIColor clearColor];
+            self.setOrderView.orderId = sender.orderObj.OrderId;
+            self.setOrderView.tfOrder.text = sender.orderObj.OrderCmd;
+            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
+                sender.orderObj.OrderCmd = orderCmd;
+                sender.orderObj.Address = address;
+            }];
+            [self.setOrderView setErrorBlock:^{
+                weakSelf.setIpView = [SetIpView viewFromDefaultXib];
+                weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
+                weakSelf.setIpView.backgroundColor = [UIColor clearColor];
+                weakSelf.setIpView.deviceId = sender.orderObj.DeviceId;
+                [weakSelf.setIpView setCancleBlock:^{
+                    [weakSelf.setIpView removeFromSuperview];
+                }];
+                [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
+                }];
+                
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+            }];
+            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
+            
+            return;
+        }
         [self load_typeSocket:999 andOrderObj:sender.orderObj];
     }
 }
 
 #pragma mark -
 #pragma mark Custom Methods
+
+//配置菜单
+-(void)showRightMenu
+{
+    [_menu close];
+    
+    if ([KxMenu isOpen]) {
+        return [KxMenu dismissMenu];
+    }
+    
+    NSArray *menuItems =
+    @[
+      [KxMenuItem menuItem:@"正常模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      
+      [KxMenuItem menuItem:@"  配置模式"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)]
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentCenter;
+    
+    CGRect rect = CGRectMake(215, -50, 100, 50);
+    
+    [KxMenu showMenuInView:self.view
+                  fromRect:rect
+                 menuItems:menuItems];
+}
+
+//点击下拉事件
+- (void)pushMenuItem:(KxMenuItem *)sender
+{
+    //order
+    if ([sender.title isEqualToString:@"正常模式"])
+    {
+        [DataUtil setGlobalModel:strCurModel_];
+    } else if ([sender.title isEqualToString:@"  配置模式"]) {
+        [UIAlertView alertViewWithTitle:@"温馨提示"
+                                message:@"您已处于设置目标模式\n点击操作即可设置."
+                      cancelButtonTitle:@"确定"
+                      otherButtonTitles:nil
+                              onDismiss:nil
+                               onCancel:nil];
+        
+        [DataUtil setGlobalModel:Model_SetOrder];
+    }
+}
 
 -(void)btnBackPressed
 {

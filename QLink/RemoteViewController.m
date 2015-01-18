@@ -60,7 +60,6 @@
 
 -(void)initData
 {
-//    isStudyModel_ = NO;
     strCurModel_ = [DataUtil getGlobalModel];
 }
 
@@ -533,7 +532,7 @@
             self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
             self.setOrderView.backgroundColor = [UIColor clearColor];
             self.setOrderView.orderId = sender.orderObj.OrderId;
-            self.setOrderView.orderCmd = sender.orderObj.OrderCmd;
+            self.setOrderView.tfOrder.text = sender.orderObj.OrderCmd;
             [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
                 sender.orderObj.OrderCmd = orderCmd;
                 sender.orderObj.Address = address;
@@ -593,15 +592,15 @@
                     target:self
                     action:@selector(pushMenuItem:)],
       
-      [KxMenuItem menuItem:@"     学习模式"
+      [KxMenuItem menuItem:@"    学习模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@"   设置IP模式"
+      [KxMenuItem menuItem:@"    设置目标"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@" 设置命令模式"
+      [KxMenuItem menuItem:@"    配置模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)]
@@ -634,11 +633,11 @@
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@"   设置IP模式"
+      [KxMenuItem menuItem:@"    设置目标"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)],
-      [KxMenuItem menuItem:@" 设置命令模式"
+      [KxMenuItem menuItem:@"    配置模式"
                      image:nil
                     target:self
                     action:@selector(pushMenuItem:)]
@@ -661,7 +660,7 @@
     if ([sender.title isEqualToString:@"正常模式"])
     {
         [DataUtil setGlobalModel:strCurModel_];
-    } else if ([sender.title isEqualToString:@"     学习模式"])
+    } else if ([sender.title isEqualToString:@"    学习模式"])
     {
         [DataUtil setGlobalModel:strCurModel_];
         [UIAlertView alertViewWithTitle:@"温馨提示"
@@ -672,7 +671,7 @@
                                onCancel:nil];
         
         [DataUtil setGlobalModel:Model_Study];
-    } else if ([sender.title isEqualToString:@"   设置IP模式"])
+    } else if ([sender.title isEqualToString:@"    设置目标"])
     {
         [DataUtil setGlobalModel:strCurModel_];
         
@@ -688,10 +687,10 @@
         }];
         
         [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
-    } else if ([sender.title isEqualToString:@" 设置命令模式"])
+    } else if ([sender.title isEqualToString:@"    配置模式"])
     {
         [UIAlertView alertViewWithTitle:@"温馨提示"
-                                message:@"您已处于设置命令模式\n点击操作即可设置."
+                                message:@"您已处于设置目标模式\n点击操作即可设置."
                       cancelButtonTitle:@"确定"
                       otherButtonTitles:nil
                               onDismiss:nil
