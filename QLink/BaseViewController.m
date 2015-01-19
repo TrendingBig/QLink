@@ -146,11 +146,13 @@
         cmdOperArr_ = [NSMutableArray arrayWithArray:cmdReadArr_];
         NSInteger iCount = [cmdReadArr_ count];
         if ([cmdOperArr_ count] == 0) {
-            [SVProgressHUD dismiss];
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                message:@"没有定义中控命令." delegate:nil cancelButtonTitle:@"关闭" otherButtonTitles:nil, nil];
-            [alertView show];
+            [SVProgressHUD showSuccessWithStatus:@"写入已经完成"];
+            
+//            [SVProgressHUD dismiss];
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+//                                                                message:@"没有定义中控命令." delegate:nil cancelButtonTitle:@"关闭" otherButtonTitles:nil, nil];
+//            [alertView show];
             return;
         }
         

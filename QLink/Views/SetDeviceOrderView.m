@@ -81,7 +81,12 @@
                      if (range.location != NSNotFound) {
                          [weakSelf removeFromSuperview];
                          
-                         [UIAlertView alertViewWithTitle:@"温馨提示" message:msg cancelButtonTitle:@"确定" otherButtonTitles:nil onDismiss:nil onCancel:^{
+                         //@"尚未配置该设备IP，请先配置IP"
+                         [UIAlertView alertViewWithTitle:@"温馨提示" message:msg
+                                       cancelButtonTitle:@"确定"
+                                       otherButtonTitles:nil
+                                               onDismiss:nil
+                                                onCancel:^{
                              if (weakSelf.errorBlock) {
                                  weakSelf.errorBlock();
                              }

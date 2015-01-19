@@ -15,6 +15,7 @@
 #import "SetIpView.h"
 #import "SetDeviceOrderView.h"
 #import "KxMenu.h"
+#import "DeviceInfoViewController.h"
 
 @interface LightViewController ()
 {
@@ -302,7 +303,7 @@
     [UIAlertView alertViewWithTitle:@"温馨提示"
                             message:nil
                   cancelButtonTitle:@"取消"
-                  otherButtonTitles:@[@"重命名",@"删除",@"设置IP"]
+                  otherButtonTitles:@[@"重命名",@"删除",@"设置IP",@"设备信息"]
                           onDismiss:^(int buttonIndex){
                               switch (buttonIndex) {
                                   case 0://重命名
@@ -391,6 +392,7 @@
                                       self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
                                       self.setIpView.backgroundColor = [UIColor clearColor];
                                       self.setIpView.deviceId = deviceId;
+                                      [self.setIpView fillContent:deviceId];
                                       [self.setIpView setCancleBlock:^{
                                           [weakSelf.setIpView removeFromSuperview];
                                       }];
@@ -398,6 +400,48 @@
                                       }];
                                       
                                       [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+                                      break;
+                                  }
+                                  case 3:
+                                  {
+                                      NSArray *array = [SQLiteUtil getOrderListByDeviceId:deviceId];
+                                      if (array.count <= 0) {
+                                          return;
+                                      }
+                                      
+                                      Order *order = [array firstObject];
+                                      NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
+                                      if ([arrayOrderTips count] < 2) {
+                                          [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                  message:@"您还没有设置IP,现在设置?"
+                                                        cancelButtonTitle:@"取消"
+                                                        otherButtonTitles:@[@"确定"]
+                                                                onDismiss:^(int buttonIndex) {
+                                                                    define_weakself;
+                                                                    self.setIpView = [SetIpView viewFromDefaultXib];
+                                                                    self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                                                    self.setIpView.backgroundColor = [UIColor clearColor];
+                                                                    self.setIpView.deviceId = deviceId;
+                                                                    [self.setIpView fillContent:deviceId];
+                                                                    [self.setIpView setCancleBlock:^{
+                                                                        [weakSelf.setIpView removeFromSuperview];
+                                                                    }];
+                                                                    [self.setIpView setComfirmBlock:^(NSString *ip) {
+                                                                    }];
+                                                                    
+                                                                    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+                                                                }onCancel:^{
+                                                                    DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
+                                                                    vc.deviceName = deviceName;
+                                                                    vc.deviceId = deviceId;
+                                                                    [self.navigationController pushViewController:vc animated:YES];
+                                                                }];
+                                      } else {
+                                          DeviceInfoViewController *vc = [[DeviceInfoViewController alloc] init];
+                                          vc.deviceName = deviceName;
+                                          vc.deviceId = deviceId;
+                                          [self.navigationController pushViewController:vc animated:YES];
+                                      }
                                       break;
                                   }
                                   default:
@@ -454,6 +498,7 @@
                 weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
                 weakSelf.setIpView.backgroundColor = [UIColor clearColor];
                 weakSelf.setIpView.deviceId = sender.orderObj.DeviceId;
+                [weakSelf.setIpView fillContent:sender.orderObj.DeviceId];
                 [weakSelf.setIpView setCancleBlock:^{
                     [weakSelf.setIpView removeFromSuperview];
                 }];

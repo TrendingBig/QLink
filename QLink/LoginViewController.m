@@ -229,7 +229,7 @@
 {
     [SVProgressHUD showWithStatus:@"正在配置ip..." maskType:SVProgressHUDMaskTypeClear];
     
-    NSString *sUrl = [NetworkUtil handleIpRequest];
+    NSString *sUrl = [NetworkUtil handleIpRequest:self.pLoginMember];
     NSURL *url = [NSURL URLWithString:sUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     
@@ -284,14 +284,6 @@
                  return;
              }
          }
-         
-//         if ([strXML containsString:@"error"]) {
-//             NSArray *errorArr = [strXML componentsSeparatedByString:@":"];
-//             if (errorArr.count > 1) {
-//                 [weakSelf actionNULL];
-//                 return;
-//             }
-//         }
          
          if (!dict) {
              [weakSelf actionNULL];

@@ -437,7 +437,7 @@
         [UIAlertView alertViewWithTitle:@"温馨提示"
                                 message:nil
                       cancelButtonTitle:@"取消"
-                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"编辑",@"设备信息"]
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"编辑"]
                               onDismiss:^(int btnIdx){
                                   switch (btnIdx) {
                                       case 0://重命名
@@ -609,6 +609,7 @@
                                           self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
                                           self.setIpView.backgroundColor = [UIColor clearColor];
                                           self.setIpView.deviceId = obj.DeviceId;
+                                          [self.setIpView fillContent:obj.DeviceId];
                                           [self.setIpView setCancleBlock:^{
                                               [weakSelf.setIpView removeFromSuperview];
                                           }];
@@ -638,6 +639,7 @@
                                                                         self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
                                                                         self.setIpView.backgroundColor = [UIColor clearColor];
                                                                         self.setIpView.deviceId = obj.DeviceId;
+                                                                        [self.setIpView fillContent:obj.DeviceId];
                                                                         [self.setIpView setCancleBlock:^{
                                                                             [weakSelf.setIpView removeFromSuperview];
                                                                         }];
@@ -878,10 +880,10 @@
                                    target:self
                                    action:@selector(pushMenuItem:)],
                      
-                     [KxMenuItem menuItem:@"初始化"
-                                    image:nil
-                                   target:self
-                                   action:@selector(pushMenuItem:)],
+//                     [KxMenuItem menuItem:@"初始化"
+//                                    image:nil
+//                                   target:self
+//                                   action:@selector(pushMenuItem:)],
                      [KxMenuItem menuItem:@"重写中控"
                                     image:nil
                                    target:self

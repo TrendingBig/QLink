@@ -15,4 +15,6 @@
 
 @property(nonatomic,retain) NSString *deviceId;
 
+-(void)fillContent:(NSString *)deviceId;
+
 @end

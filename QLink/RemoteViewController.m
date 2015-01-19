@@ -526,34 +526,19 @@
         }
     } else {
         if ([[DataUtil getGlobalModel] isEqualToString:Model_SetOrder]) {//设置命令模式
-            
-            define_weakself;
-            self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
-            self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            self.setOrderView.backgroundColor = [UIColor clearColor];
-            self.setOrderView.orderId = sender.orderObj.OrderId;
-            self.setOrderView.tfOrder.text = sender.orderObj.OrderCmd;
-            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
-                sender.orderObj.OrderCmd = orderCmd;
-                sender.orderObj.Address = address;
-            }];
-            [self.setOrderView setErrorBlock:^{
-                weakSelf.setIpView = [SetIpView viewFromDefaultXib];
-                weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
-                weakSelf.setIpView.backgroundColor = [UIColor clearColor];
-                weakSelf.setIpView.deviceId = weakSelf.deviceId;
-                [weakSelf.setIpView setCancleBlock:^{
-                    [weakSelf.setIpView removeFromSuperview];
-                }];
-                [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
-                }];
-                
-                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
-            }];
-            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
+        
+            [self setOrderViewOpen:sender.orderObj];
             
             return;
         }
+        if ([DataUtil checkNullOrEmpty:sender.orderObj.OrderCmd]) {
+            
+            [UIAlertView alertViewWithTitle:@"温馨提示" message:@"按钮没有配置，请先配置" cancelButtonTitle:@"确定" otherButtonTitles:nil onDismiss:nil onCancel:^{
+                [self setOrderViewOpen:sender.orderObj];
+            }];
+            return;
+        }
+        
         if ([[DataUtil getGlobalModel] isEqualToString:Model_Study]) {
             studyTimerView_.hidden = NO;
             [studyTimerView_ startTimer];
@@ -680,6 +665,7 @@
         self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
         self.setIpView.backgroundColor = [UIColor clearColor];
         self.setIpView.deviceId = self.deviceId;
+        [self.setIpView fillContent:self.deviceId];
         [self.setIpView setCancleBlock:^{
             [weakSelf.setIpView removeFromSuperview];
         }];
@@ -703,6 +689,35 @@
 -(void)btnBackPressed
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)setOrderViewOpen:(Order *)orderObj
+{
+    define_weakself;
+    self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
+    self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.setOrderView.backgroundColor = [UIColor clearColor];
+    self.setOrderView.orderId = orderObj.OrderId;
+    self.setOrderView.tfOrder.text = orderObj.OrderCmd;
+    [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
+        orderObj.OrderCmd = orderCmd;
+        orderObj.Address = address;
+    }];
+    [self.setOrderView setErrorBlock:^{
+        weakSelf.setIpView = [SetIpView viewFromDefaultXib];
+        weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
+        weakSelf.setIpView.backgroundColor = [UIColor clearColor];
+        weakSelf.setIpView.deviceId = weakSelf.deviceId;
+        [weakSelf.setIpView fillContent:weakSelf.deviceId];
+        [weakSelf.setIpView setCancleBlock:^{
+            [weakSelf.setIpView removeFromSuperview];
+        }];
+        [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
+        }];
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+    }];
+    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
 }
 
 #pragma mark -

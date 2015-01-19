@@ -7,7 +7,6 @@
 //
 
 #import "NetworkUtil.h"
-#import "DataUtil.h"
 
 @implementation NetworkUtil
 
@@ -55,12 +54,15 @@
     return sUrl;
 }
 
-+(NSString *)handleIpRequest
++(NSString *)handleIpRequest:(Member *)loginUser
 {
     NSString *wifiIp = [DataUtil localWiFiIPAddress];
     wifiIp = [NSString stringWithFormat:@"TCP:%@:1234",wifiIp];
     
-    NSString *sUrl = [NSString stringWithFormat:@"%@&action=savekfchang&dx=3&ChangVar=%@",[self getBaseUrl],wifiIp];
+    //因为这时候，Member 全局变量还没被覆盖最新的，到Action=null请求时，才为最新的
+    NSString *baseUrl = [NSString stringWithFormat:@"http://qlink.cc/zq/lookmobile.asp?uname=%@&upsd=%@&passkey=%@",loginUser.uName,loginUser.uPwd,loginUser.uKey];
+    
+    NSString *sUrl = [NSString stringWithFormat:@"%@&action=savekfchang&dx=3&ChangVar=%@",baseUrl,wifiIp];
     return sUrl;
 }
 

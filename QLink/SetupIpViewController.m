@@ -308,9 +308,6 @@
         MainViewController *mainVC = [[MainViewController alloc] init];
         [self.navigationController pushViewController:mainVC animated:YES];
     }else{
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-//                                                            message:@"配置失败,请重试." delegate:nil cancelButtonTitle:@"关闭" otherButtonTitles:nil, nil];
-//        [alertView show];
         [SVProgressHUD dismiss];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"

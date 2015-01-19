@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DataUtil.h"
 
 @interface NetworkUtil : NSObject
 
@@ -33,7 +34,7 @@
 //修改设备名称URL
 +(NSString *)getChangeDeviceName:(NSString *)newName andDeviceId:(NSString *)deviceId;
 
-+(NSString *)handleIpRequest;
++(NSString *)handleIpRequest:(Member *)loginUser;
 
 //编辑场景
 +(NSString *)getEditSence:(NSString *)senceId

@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "NetworkUtil.h"
 #import "AFHTTPRequestOperation.h"
+#import "DataUtil.h"
 
 @interface SetIpView()<UITextFieldDelegate>
 
@@ -29,19 +30,44 @@
 
 -(void)awakeFromNib
 {
-    Control *control = [SQLiteUtil getControlObj];
-    NSArray *array = [control.Ip componentsSeparatedByString:@"."];
-    if (array.count > 3) {
-        self.tfCode1.text = array[0];
-        self.tfCode2.text = array[1];
-        self.tfCode3.text = array[2];
-    }
-    
     self.tfCode1.delegate = self;
     self.tfCode2.delegate = self;
     self.tfCode3.delegate = self;
     self.tfCode4.delegate = self;
     self.tfCode5.delegate = self;
+}
+
+-(void)fillContent:(NSString *)deviceId
+{
+    NSArray *array = [SQLiteUtil getOrderListByDeviceId:deviceId];
+    if (array.count <= 0) {
+        Control *control = [SQLiteUtil getControlObj];
+        NSArray *array = [control.Ip componentsSeparatedByString:@"."];
+        if (array.count > 3) {
+            self.tfCode1.text = array[0];
+            self.tfCode2.text = array[1];
+            self.tfCode3.text = array[2];
+        }
+    } else {
+        Order *order = [array firstObject];
+        NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
+        
+        if ([arrayOrderTips count] > 2) {
+            if ( [[arrayOrderTips[0] lowercaseString] isEqualToString:@"tcp"]) {
+                self.btnTcp.selected = YES;
+                self.btnUdp.selected = NO;
+            } else {
+                self.btnUdp.selected = YES;
+                self.btnTcp.selected = NO;
+            }
+            NSArray *ipAr = [arrayOrderTips[1] componentsSeparatedByString:@"."];
+            self.tfCode1.text = ipAr[0];
+            self.tfCode2.text = ipAr[1];
+            self.tfCode3.text = ipAr[2];
+            self.tfCode4.text = ipAr[3];
+            self.tfCode5.text = arrayOrderTips[2];
+        }
+    }
 }
 
 - (IBAction)btnTcpPressed:(UIButton *)sender {
@@ -86,10 +112,10 @@
         [UIAlertView alertViewWithTitle:@"温馨提示" message:@"输入信息包含非数字"];
         return;
     }
-    if (([code1 integerValue] > 255 || [code1 integerValue] < 2) ||
-        ([code2 integerValue] > 255 || [code2 integerValue] < 2) ||
-        ([code3 integerValue] > 255 || [code3 integerValue] < 2) ||
-        ([code4 integerValue] > 255 || [code4 integerValue] < 1) ||
+    if (([code1 integerValue] > 255 || [code1 integerValue] < 0) ||
+        ([code2 integerValue] > 255 || [code2 integerValue] < 0) ||
+        ([code3 integerValue] > 255 || [code3 integerValue] < 0) ||
+        ([code4 integerValue] > 255 || [code4 integerValue] < 0) ||
         ([code5 integerValue] > 65534 || [code5 integerValue] < 300)) {
         [UIAlertView alertViewWithTitle:@"温馨提示" message:@"请输入合理的\nIP或端口号范围"];
         return;

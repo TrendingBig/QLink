@@ -36,9 +36,7 @@
     
     NSString *sUrl = [NetworkUtil getBaseUrl];
     NSURL *url = [NSURL URLWithString:sUrl];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
      {
