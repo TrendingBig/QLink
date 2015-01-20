@@ -91,6 +91,7 @@
        andLayerId:(NSString *)layerId
         andRoomId:(NSString *)roomId
       andDeviceId:(NSString *)deviceId
+          andHora:(NSString *)hora
 {
     Order *obj = [[Order alloc] init];
     obj.OrderId = orderId;
@@ -105,6 +106,7 @@
     obj.LayerId = layerId;
     obj.RoomId = roomId;
     obj.DeviceId = deviceId;
+    obj.Hora = hora;
     
     return obj;
 }

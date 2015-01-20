@@ -40,19 +40,10 @@
 -(void)fillContent:(NSString *)deviceId
 {
     NSArray *array = [SQLiteUtil getOrderListByDeviceId:deviceId];
-    if (array.count <= 0) {
-        Control *control = [SQLiteUtil getControlObj];
-        NSArray *array = [control.Ip componentsSeparatedByString:@"."];
-        if (array.count > 3) {
-            self.tfCode1.text = array[0];
-            self.tfCode2.text = array[1];
-            self.tfCode3.text = array[2];
-        }
-    } else {
+    if (array.count > 0) {
         Order *order = [array firstObject];
         NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
-        
-        if ([arrayOrderTips count] > 2) {
+        if (arrayOrderTips.count > 1) {
             if ( [[arrayOrderTips[0] lowercaseString] isEqualToString:@"tcp"]) {
                 self.btnTcp.selected = YES;
                 self.btnUdp.selected = NO;
@@ -66,6 +57,23 @@
             self.tfCode3.text = ipAr[2];
             self.tfCode4.text = ipAr[3];
             self.tfCode5.text = arrayOrderTips[2];
+        } else {
+            Control *control = [SQLiteUtil getControlObj];
+            NSArray *array = [control.Ip componentsSeparatedByString:@"."];
+            if (array.count > 3) {
+                self.tfCode1.text = array[0];
+                self.tfCode2.text = array[1];
+                self.tfCode3.text = array[2];
+            }
+        }
+        
+    } else {
+        Control *control = [SQLiteUtil getControlObj];
+        NSArray *array = [control.Ip componentsSeparatedByString:@"."];
+        if (array.count > 3) {
+            self.tfCode1.text = array[0];
+            self.tfCode2.text = array[1];
+            self.tfCode3.text = array[2];
         }
     }
 }

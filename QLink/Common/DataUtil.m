@@ -443,7 +443,7 @@
 //命令表sql拼接
 +(NSString *)connectOrderSql:(Order *)obj
 {
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO ORDERS (\"OrderId\", \"OrderName\", \"Type\", \"SubType\" , \"OrderCmd\", \"Address\", \"StudyCmd\",\"OrderNo\", \"HouseId\", \"LayerId\", \"RoomId\", \"DeviceId\") VALUES  (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\" , \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")",obj.OrderId, obj.OrderName,obj.Type, obj.SubType , obj.OrderCmd,obj.Address, obj.StudyCmd,obj.OrderNo, obj.HouseId, obj.LayerId, obj.RoomId, obj.DeviceId];
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO ORDERS (\"OrderId\", \"OrderName\", \"Type\", \"SubType\" , \"OrderCmd\", \"Address\", \"StudyCmd\",\"OrderNo\", \"HouseId\", \"LayerId\", \"RoomId\", \"DeviceId\",\"Hora\") VALUES  (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\" , \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\",\"%@\")",obj.OrderId, obj.OrderName,obj.Type, obj.SubType , obj.OrderCmd,obj.Address, obj.StudyCmd,obj.OrderNo, obj.HouseId, obj.LayerId, obj.RoomId, obj.DeviceId,obj.Hora];
     return sql;
 }
 
@@ -916,7 +916,8 @@
                                      andHouseId:[rs stringForColumn:@"HouseId"]
                                      andLayerId:[rs stringForColumn:@"LayerId"]
                                       andRoomId:[rs stringForColumn:@"RoomId"]
-                                    andDeviceId:[rs stringForColumn:@"DeviceId"]];
+                                    andDeviceId:[rs stringForColumn:@"DeviceId"]
+                                        andHora:[rs stringForColumn:@"Hora"]];
             [orderArr addObject:obj];
         }
         
@@ -951,7 +952,8 @@
                                 andHouseId:[rs stringForColumn:@"HouseId"]
                                 andLayerId:[rs stringForColumn:@"LayerId"]
                                  andRoomId:[rs stringForColumn:@"RoomId"]
-                               andDeviceId:[rs stringForColumn:@"DeviceId"]];
+                               andDeviceId:[rs stringForColumn:@"DeviceId"]
+                                   andHora:[rs stringForColumn:@"Hora"]];
             [orderArr addObject:obj];
         }
         

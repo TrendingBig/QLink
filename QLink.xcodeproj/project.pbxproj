@@ -369,7 +369,6 @@
 		8A1FDBF11A5D7EB4004B1BBA /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1FDBF01A5D7EB4004B1BBA /* RegisterViewController.m */; };
 		8A1FDBF31A5D7ED5004B1BBA /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A1FDBF21A5D7ED5004B1BBA /* RegisterViewController.xib */; };
 		8A206E8D1A39DD860018A634 /* MySlider+touch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A206E8C1A39DD860018A634 /* MySlider+touch.m */; };
-		8A20D8AA1A602B34004956E9 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A20D8A91A602B34004956E9 /* QLink.sqlite */; };
 		8A20D8DE1A603476004956E9 /* UIView+xib.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A20D8DD1A603476004956E9 /* UIView+xib.m */; };
 		8A21895819FAA821007980F0 /* success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A21895719FAA821007980F0 /* success@2x.png */; };
 		8A22506F1A6554C800AD29DE /* DeviceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A22506E1A6554C800AD29DE /* DeviceInfoViewController.xib */; };
@@ -379,6 +378,7 @@
 		8A22508A1A6575A500AD29DE /* SetDeviceOrderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */; };
 		8A2256AD19E822A3009F7D03 /* sence_cancle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AB19E822A3009F7D03 /* sence_cancle.png */; };
 		8A2256AE19E822A3009F7D03 /* sence_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */; };
+		8A247BE41A6E9F4200057C85 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A247BE31A6E9F4200057C85 /* QLink.sqlite */; };
 		8A25548819EA1C360031B9F4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */; };
 		8A25548919EA1C360031B9F4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548719EA1C360031B9F4 /* GCDAsyncUdpSocket.m */; };
 		8A25549319EA36A90031B9F4 /* NSString+NSStringHexToBytes.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25549219EA36A90031B9F4 /* NSString+NSStringHexToBytes.m */; };
@@ -935,7 +935,6 @@
 		8A1FDBF21A5D7ED5004B1BBA /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
 		8A206E8B1A39DD860018A634 /* MySlider+touch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MySlider+touch.h"; sourceTree = "<group>"; };
 		8A206E8C1A39DD860018A634 /* MySlider+touch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MySlider+touch.m"; sourceTree = "<group>"; };
-		8A20D8A91A602B34004956E9 /* QLink.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = QLink.sqlite; sourceTree = "<group>"; };
 		8A20D8DC1A603476004956E9 /* UIView+xib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+xib.h"; sourceTree = "<group>"; };
 		8A20D8DD1A603476004956E9 /* UIView+xib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+xib.m"; sourceTree = "<group>"; };
 		8A21895719FAA821007980F0 /* success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success@2x.png"; sourceTree = "<group>"; };
@@ -948,6 +947,7 @@
 		8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetDeviceOrderView.xib; sourceTree = "<group>"; };
 		8A2256AB19E822A3009F7D03 /* sence_cancle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sence_cancle.png; sourceTree = "<group>"; };
 		8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sence_cancle@2x.png"; sourceTree = "<group>"; };
+		8A247BE31A6E9F4200057C85 /* QLink.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = QLink.sqlite; sourceTree = "<group>"; };
 		8A25548419EA1C360031B9F4 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		8A25548619EA1C360031B9F4 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
@@ -1641,8 +1641,8 @@
 		8A97414A19CC875800E409A6 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				8A247BE31A6E9F4200057C85 /* QLink.sqlite */,
 				3543487B19D10B2900B53359 /* iConPlist.plist */,
-				8A20D8A91A602B34004956E9 /* QLink.sqlite */,
 				8A0738FE19DEEEE3001E6F45 /* DeviceConfigIconPlist.plist */,
 				35131F3619D4321E005A3C17 /* RemotePlist.plist */,
 				8A20D8DC1A603476004956E9 /* UIView+xib.h */,
@@ -2305,7 +2305,6 @@
 				8AAC54BC19F95F3A0094C2BC /* OtView.xib in Resources */,
 				35131EE919D4039A005A3C17 /* dt_top02.png in Resources */,
 				3534CD1119CAB476001C83F0 /* 首页_三横@2x.png in Resources */,
-				8A20D8AA1A602B34004956E9 /* QLink.sqlite in Resources */,
 				3546E5C419CACC9E00B357C9 /* 首页_切换选中左@2x.png in Resources */,
 				35A8A92E19D112180018EB67 /* iCon_底部按钮01@2x.png in Resources */,
 				35131EDD19D4039A005A3C17 /* dt_middle02.png in Resources */,
@@ -2360,6 +2359,7 @@
 				8A0738FA19DEEE63001E6F45 /* device_继电器.png in Resources */,
 				35A4E5E919D2ECE7007A3C30 /* nm_left@2x.png in Resources */,
 				8AD562DA19D716AD006E3285 /* light_br.png in Resources */,
+				8A247BE41A6E9F4200057C85 /* QLink.sqlite in Resources */,
 				35A8A9B119D166470018EB67 /* ac_select@2x.png in Resources */,
 				35A4E61419D2F9B7007A3C30 /* ot_left@2x.png in Resources */,
 				8AAC54AB19F95F3A0094C2BC /* BsTcView.xib in Resources */,

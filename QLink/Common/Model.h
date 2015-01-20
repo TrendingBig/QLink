@@ -93,6 +93,7 @@
 @property(nonatomic,strong) NSString *RoomId;
 @property(nonatomic,strong) NSString *DeviceId;
 @property(nonatomic,strong) NSString *OrderNo;
+@property(nonatomic,strong) NSString *Hora;
 
 //紧急模式下配置参数
 @property(nonatomic,strong) NSString *senceId;
@@ -108,7 +109,8 @@
           andHouseId:(NSString *)houseId
           andLayerId:(NSString *)layerId
            andRoomId:(NSString *)roomId
-         andDeviceId:(NSString *)deviceId;
+         andDeviceId:(NSString *)deviceId
+             andHora:(NSString *)hora;
 
 @end
 

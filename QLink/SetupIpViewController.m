@@ -258,9 +258,8 @@
 -(void)actionNULL
 {
     NSString *curVersion = [SQLiteUtil getCurVersionNo];
-    
     Member *curMember = [Member getMember];
-    
+   
     //重新解析配置文件
     if ((curMember && ![curMember.uKey isEqualToString:self.pLoginMember.uKey])) {//更换用户
         //清除本地配置数据

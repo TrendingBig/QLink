@@ -148,7 +148,8 @@
                                                       andHouseId:[orderDic objectForKey:@"_houseid"]
                                                       andLayerId:[orderDic objectForKey:@"_layerId"]
                                                        andRoomId:[orderDic objectForKey:@"_roomId"]
-                                                     andDeviceId:[orderDic objectForKey:@"_deviceid"]];
+                                                     andDeviceId:[orderDic objectForKey:@"_deviceid"]
+                                                         andHora:[orderDic objectForKey:@"_hora"]];
                              [sqlArr addObject:[SQLiteUtil connectOrderSql:orderObj]];
                          }
                      }

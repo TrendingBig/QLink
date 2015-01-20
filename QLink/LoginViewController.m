@@ -151,8 +151,13 @@
             [weakSelf actionNULL];
         }
     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        weakSelf.pConfigTemp = [Config getConfig];
-        [weakSelf actionNULL];
+        Member *curMember = [Member getMember];
+        if (curMember && [curMember.uKey isEqualToString:self.pLoginMember.uKey] && [curMember.uName isEqualToString:self.pLoginMember.uName] &&[curMember.uPwd isEqualToString:self.pLoginMember.uPwd]) {
+            weakSelf.pConfigTemp = [Config getConfig];
+            [weakSelf actionNULL];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"请确认网络链接\n或输入有效账号"];
+        }
     }];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];

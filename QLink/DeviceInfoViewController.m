@@ -12,6 +12,7 @@
 #import "ILBarButtonItem.h"
 #import "UIAlertView+MKBlockAdditions.h"
 #import "SetIpView.h"
+#import "NSString+NSStringHexToBytes.h"
 
 @interface DeviceInfoViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -104,10 +105,24 @@
     }
     
     Order *obj = [self.models objectAtIndex:indexPath.row];
-    
-    NSString *orderValue = [DataUtil checkNullOrEmpty:obj.OrderCmd] ? @"暂无" : obj.OrderCmd;
     cell.lblOrderName.text = obj.OrderName;
-    cell.lblOrderValue.text = orderValue;
+    
+    NSString *orderValue = @"";
+    
+    if ([[DataUtil getGlobalModel] isEqualToString:Model_ZKDOMAIN] || [DataUtil checkNullOrEmpty:obj.OrderCmd]) {//中控模式 不变
+        NSString *orderValue1 = [DataUtil checkNullOrEmpty:obj.OrderCmd] ? @"暂无" : obj.OrderCmd;
+        cell.lblOrderValue.text = orderValue1;
+        orderValue = orderValue1;
+    } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)
+        NSString *handleOrderCmd = [obj.OrderCmd substringFromIndex:4];
+        if ([obj.Hora isEqualToString:@"1"]) { //转ASCII
+            NSData *data = [handleOrderCmd hexToBytes];
+            NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
+            
+            cell.lblOrderValue.text = result;
+            orderValue = result;
+        }
+    }
     
     //设置自动行数与字符换行
     [cell.lblOrderValue setNumberOfLines:0];
