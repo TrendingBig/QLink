@@ -626,9 +626,15 @@
                                               return;
                                           }
                                           
-                                          Order *order = [array firstObject];
-                                          NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
-                                          if ([arrayOrderTips count] < 2) {
+                                          BOOL isFindIp = NO;
+                                          for (Order *order in array) {
+                                              if (![DataUtil checkNullOrEmpty:order.Address]) {
+                                                  isFindIp = YES;
+                                                  break;
+                                              }
+                                          }
+                                          
+                                          if (!isFindIp) {
                                               [UIAlertView alertViewWithTitle:@"温馨提示"
                                                                       message:@"您还没有设置IP,现在设置?"
                                                             cancelButtonTitle:@"取消"

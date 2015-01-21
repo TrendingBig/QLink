@@ -16,8 +16,6 @@
 
 @interface SetDeviceOrderView()<UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *btnAsc;
-
 @end
 
 @implementation SetDeviceOrderView
@@ -25,7 +23,6 @@
 {
     self.tfOrder.delegate = self;
 }
-
 - (IBAction)actionAsc:(UIButton *)sender
 {
     sender.selected = !sender.selected;
@@ -63,11 +60,11 @@
                  return;
              }
              NSString *address = [resultArr[1] stringByReplacingOccurrencesOfString:@"/" withString:@":"];
-             [SQLiteUtil updateDeviceOrder:_orderId andAddress:address andOrderCmd:resultArr[2]];
+             [SQLiteUtil updateDeviceOrder:_orderId andAddress:address andOrderCmd:resultArr[2] andHora:resultArr[3]];
              [UIAlertView alertViewWithTitle:@"温馨提示" message:@"设置成功"];
              [weakSelf removeFromSuperview];
              if (weakSelf.confirmBlock) {
-                 weakSelf.confirmBlock(resultArr[2],address);
+                 weakSelf.confirmBlock(resultArr[2],address,resultArr[3]);
              }
              [SVProgressHUD dismiss];
          } else {

@@ -703,6 +703,7 @@
     NSString *orderCmd = orderObj.OrderCmd;
     if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [DataUtil checkNullOrEmpty:orderCmd]) {//中控模式 不变
         self.setOrderView.tfOrder.text = orderObj.OrderCmd;
+        self.setOrderView.btnAsc.selected = NO;
     } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)
         NSString *handleOrderCmd = [orderCmd substringFromIndex:4];
         if ([orderObj.Hora isEqualToString:@"1"]) { //转ASCII
@@ -710,11 +711,16 @@
             NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
             
             self.setOrderView.tfOrder.text = result;
+            self.setOrderView.btnAsc.selected = YES;
+        } else {
+            self.setOrderView.tfOrder.text = handleOrderCmd;
+            self.setOrderView.btnAsc.selected = NO;
         }
     }
-    [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
+    [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address,NSString *hoar){
         orderObj.OrderCmd = orderCmd;
         orderObj.Address = address;
+        orderObj.Hora = hoar;
     }];
     [self.setOrderView setErrorBlock:^{
         weakSelf.setIpView = [SetIpView viewFromDefaultXib];

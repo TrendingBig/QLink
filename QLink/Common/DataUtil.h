@@ -227,7 +227,8 @@
 //更改设备Order命令
 +(BOOL)updateDeviceOrder:(NSString *)orderId
               andAddress:(NSString *)address
-             andOrderCmd:(NSString *)orderCmd;
+             andOrderCmd:(NSString *)orderCmd
+                 andHora:(NSString *)hora;
 
 @end
 

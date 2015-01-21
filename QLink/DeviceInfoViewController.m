@@ -78,14 +78,18 @@
         return;
     }
     
-    Order *order = [self.models firstObject];
-    self.lblDeviceName.text = self.deviceName;
-    NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
-    if ([arrayOrderTips count] > 2) {
-        self.lblType.text = arrayOrderTips[0];
-        self.lblIp.text = arrayOrderTips[1];
-        self.lblPort.text = arrayOrderTips[2];
+    for (Order *order in self.models) {
+        if (![DataUtil checkNullOrEmpty:order.Address]) {
+            NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
+            if ([arrayOrderTips count] > 2) {
+                self.lblType.text = arrayOrderTips[0];
+                self.lblIp.text = arrayOrderTips[1];
+                self.lblPort.text = arrayOrderTips[2];
+            }
+            break;
+        }
     }
+    self.lblDeviceName.text = self.deviceName;
 }
 
 #pragma mark -
@@ -119,8 +123,11 @@
             NSData *data = [handleOrderCmd hexToBytes];
             NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
             
-            cell.lblOrderValue.text = result;
-            orderValue = result;
+            cell.lblOrderValue.text = [NSString stringWithFormat:@"%@(A)",result];
+            orderValue = [NSString stringWithFormat:@"%@(A)",result];
+        } else { //0
+            cell.lblOrderValue.text = [NSString stringWithFormat:@"%@(H)",handleOrderCmd];
+            orderValue = [NSString stringWithFormat:@"%@(H)",handleOrderCmd];
         }
     }
     

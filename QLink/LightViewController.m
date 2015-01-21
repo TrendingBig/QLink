@@ -410,9 +410,15 @@
                                           return;
                                       }
                                       
-                                      Order *order = [array firstObject];
-                                      NSArray *arrayOrderTips = [order.Address componentsSeparatedByString:@":"];
-                                      if ([arrayOrderTips count] < 2) {
+                                      BOOL isFindIp = NO;
+                                      for (Order *order in array) {
+                                          if (![DataUtil checkNullOrEmpty:order.Address]) {
+                                              isFindIp = YES;
+                                              break;
+                                          }
+                                      }
+                                      
+                                      if (!isFindIp) {
                                           [UIAlertView alertViewWithTitle:@"温馨提示"
                                                                   message:@"您还没有设置IP,现在设置?"
                                                         cancelButtonTitle:@"取消"
@@ -492,6 +498,7 @@
             NSString *orderCmd = sender.orderObj.OrderCmd;
             if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [DataUtil checkNullOrEmpty:orderCmd]) {//中控模式 不变
                 self.setOrderView.tfOrder.text = sender.orderObj.OrderCmd;
+                self.setOrderView.btnAsc.selected = NO;
             } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)
                 NSString *handleOrderCmd = [orderCmd substringFromIndex:4];
                 if ([sender.orderObj.Hora isEqualToString:@"1"]) { //转ASCII
@@ -499,12 +506,17 @@
                     NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
                     
                     self.setOrderView.tfOrder.text = result;
+                    self.setOrderView.btnAsc.selected = YES;
+                } else {
+                    self.setOrderView.tfOrder.text = handleOrderCmd;
+                    self.setOrderView.btnAsc.selected = NO;
                 }
             }
             
-            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address){
+            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address,NSString *hoar){
                 sender.orderObj.OrderCmd = orderCmd;
                 sender.orderObj.Address = address;
+                sender.orderObj.Hora = hoar;
             }];
             [self.setOrderView setErrorBlock:^{
                 weakSelf.setIpView = [SetIpView viewFromDefaultXib];

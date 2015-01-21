@@ -969,9 +969,10 @@
 +(BOOL)updateDeviceOrder:(NSString *)orderId
               andAddress:(NSString *)address
              andOrderCmd:(NSString *)orderCmd
+                 andHora:(NSString *)hora
 {
     GlobalAttr *obj = [DataUtil shareInstanceToRoom];
-    NSString *sql = [NSString stringWithFormat:@"UPDATE ORDERS SET Address='%@', orderCmd='%@' where OrderId='%@' and HouseId='%@' and LayerId='%@' and Roomid='%@'",address,orderCmd,orderId,obj.HouseId,obj.LayerId,obj.RoomId];
+    NSString *sql = [NSString stringWithFormat:@"UPDATE ORDERS SET Address='%@', orderCmd='%@',Hora='%@' where OrderId='%@' and HouseId='%@' and LayerId='%@' and Roomid='%@'",address,orderCmd,orderId,hora,obj.HouseId,obj.LayerId,obj.RoomId];
     FMDatabase *db = [self getDB];
     
     [db open];
