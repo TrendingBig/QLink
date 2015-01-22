@@ -34,6 +34,9 @@
 //修改设备名称URL
 +(NSString *)getChangeDeviceName:(NSString *)newName andDeviceId:(NSString *)deviceId;
 
+//修改协议URL
++(NSString *)getChangeDeviceProtocol:(NSString *)name andDeviceId:(NSString *)deviceId;
+
 +(NSString *)handleIpRequest:(Member *)loginUser;
 
 //编辑场景

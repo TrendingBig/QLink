@@ -701,7 +701,7 @@
     self.setOrderView.backgroundColor = [UIColor clearColor];
     self.setOrderView.orderId = orderObj.OrderId;
     NSString *orderCmd = orderObj.OrderCmd;
-    if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [DataUtil checkNullOrEmpty:orderCmd]) {//中控模式 不变
+    if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [strCurModel_ isEqualToString:Model_ZKIp] || [DataUtil checkNullOrEmpty:orderCmd]) {//中控模式 不变
         self.setOrderView.tfOrder.text = orderObj.OrderCmd;
         self.setOrderView.btnAsc.selected = NO;
     } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)

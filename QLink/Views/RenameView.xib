@@ -20,7 +20,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请输入新名称" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AVS-Ne-ey2">
-                            <rect key="frame" x="55" y="65" width="84" height="21"/>
+                            <rect key="frame" x="55" y="65" width="175" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -62,6 +62,7 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="lblTabName" destination="AVS-Ne-ey2" id="Sqn-t4-j8C"/>
                 <outlet property="tfContent" destination="AZQ-PR-62E" id="mLe-iL-rF8"/>
             </connections>
             <point key="canvasLocation" x="-218" y="-6"/>

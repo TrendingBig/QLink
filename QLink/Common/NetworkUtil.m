@@ -74,6 +74,15 @@
     return sUrl;
 }
 
+//修改协议URL
++(NSString *)getChangeDeviceProtocol:(NSString *)name andDeviceId:(NSString *)deviceId
+{
+    NSString *sUrl = [NSString stringWithFormat:@"%@&action=savethisdevice&deviceid=%@&dname=%@",[self getBaseUrl],deviceId,name];
+    sUrl = [sUrl stringByAddingPercentEscapesUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    return sUrl;
+}
+
+
 //编辑场景
 +(NSString *)getEditSence:(NSString *)senceId andSenceName:(NSString *)senceName andCmd:(NSString *)cmds andTime:(NSString *)times
 {

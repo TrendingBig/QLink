@@ -77,6 +77,9 @@
     [self registerNotification];
     
     [self initLoginZK];
+    
+    //默认进入设备页面
+    [self btnDevicePressed:self.btnDeviceControl];
 }
 
 #pragma mark -
@@ -529,7 +532,7 @@
         [UIAlertView alertViewWithTitle:@"操作"
                                 message:nil
                       cancelButtonTitle:@"取消"
-                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"设置IP",@"设备信息"]
+                      otherButtonTitles:@[@"重命名",@"图标重置",@"删除",@"设置IP",@"设备信息",@"存储协议"]
                               onDismiss:^(int buttonIndex){
                                   switch (buttonIndex) {
                                       case 0://重命名
@@ -667,6 +670,48 @@
                                           }
                                           break;
                                       }
+                                      case 5://存储协议
+                                      {
+                                          self.renameView = [RenameView viewFromDefaultXib];
+                                          self.renameView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+                                          self.renameView.backgroundColor = [UIColor clearColor];
+                                          self.renameView.lblTabName.text = @"请输入协议名称";
+                                          [self.renameView setCanclePressed:^{
+                                              [weakSelf.renameView removeFromSuperview];
+                                          }];
+                                          [self.renameView setConfirmPressed:^(UILabel *lTitle,NSString *newName){
+                                              NSString *sUrl = [NetworkUtil getChangeDeviceProtocol:newName andDeviceId:obj.DeviceId];
+                                              
+                                              NSURL *url = [NSURL URLWithString:sUrl];
+                                              NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+                                              NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+                                              NSString *sResult = [[NSString alloc]initWithData:received encoding:NSUTF8StringEncoding];
+                                              NSRange range = [sResult rangeOfString:@"error"];
+                                              if (range.location != NSNotFound)
+                                              {
+                                                  NSArray *errorArr = [sResult componentsSeparatedByString:@":"];
+                                                  if (errorArr.count > 1) {
+                                                      [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                                                      return;
+                                                  }
+                                              }
+                                              if ([[sResult lowercaseString] isEqualToString:@"ok"]) {
+                                                  
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"设置成功"
+                                                                cancelButtonTitle:@"确定"];
+                                                  
+                                                  [weakSelf.renameView removeFromSuperview];
+                                                  
+                                              }else{
+                                                  [UIAlertView alertViewWithTitle:@"温馨提示"
+                                                                          message:@"设置失败,请稍后再试."
+                                                                cancelButtonTitle:@"关闭"];
+                                              }
+                                          }];
+                                          [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.renameView];
+                                          break;
+                                      }
                                       default:
                                           break;
                                   }
@@ -676,8 +721,6 @@
 
 -(void)handleSingleTapPressed:(int)index andType:(NSString *)pType
 {
-    NSLog(@"单击====%d",index);
-    
     if ([pType isEqualToString:MACRO]) {//场景
         Sence *obj = [senceArr_ objectAtIndex:index];
         Order *orderObj = [[Order alloc] init];
@@ -692,6 +735,15 @@
         DeviceConfigViewController *deviceConfigVC = [[DeviceConfigViewController alloc] init];
         [self.navigationController pushViewController:deviceConfigVC animated:YES];
     } else if([pType isEqualToString:SANSANADDMACRO]){ // 添加场景
+        if (deviceCount_ == 1) {//说明设备为 0 个
+            [UIAlertView alertViewWithTitle:@"温馨提示"
+                                    message:@"没有设备,无法构建场景,请先添加设备!"
+                          cancelButtonTitle:@"确定" otherButtonTitles:nil onDismiss:nil onCancel:^{
+                              [self btnDevicePressed:_btnDeviceControl];
+            }];
+            return;
+        }
+        
         
         [DataUtil setUpdateInsertSenceInfo:@"" andSenceName:@""];
         
