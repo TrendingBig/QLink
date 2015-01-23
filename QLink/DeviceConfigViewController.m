@@ -318,8 +318,11 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshDeviceTab" object:nil];
     
-    self.zkOperType = ZkOperDevice;
-    [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
+    Config *config = [Config getConfig];
+    if (config.isBuyCenterControl) {
+        self.zkOperType = ZkOperDevice;
+        [self load_typeSocket:SocketTypeWriteZk andOrderObj:nil];
+    }
 }
 
 #pragma mark -

@@ -113,7 +113,7 @@
     
     NSString *orderValue = @"";
     
-    if ([[DataUtil getGlobalModel] isEqualToString:Model_ZKDOMAIN] || [DataUtil checkNullOrEmpty:obj.OrderCmd]) {//中控模式 不变
+    if ([[DataUtil getGlobalModel] isEqualToString:Model_ZKDOMAIN] ||[[DataUtil getGlobalModel] isEqualToString:Model_ZKIp] || [DataUtil checkNullOrEmpty:obj.OrderCmd]) {//中控模式 不变
         NSString *orderValue1 = [DataUtil checkNullOrEmpty:obj.OrderCmd] ? @"暂无" : obj.OrderCmd;
         cell.lblOrderValue.text = orderValue1;
         orderValue = orderValue1;
