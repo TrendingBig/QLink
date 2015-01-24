@@ -606,7 +606,7 @@
                                           break;
                                       }
                                       case 3://设置IP
-                                      {
+                                      {   
                                           define_weakself;
                                           self.setIpView = [SetIpView viewFromDefaultXib];
                                           self.setIpView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);

@@ -505,6 +505,14 @@
         return;
     }
     
+    if ([DataUtil checkNullOrEmpty:sender.orderObj.OrderCmd]) {
+        
+        [UIAlertView alertViewWithTitle:@"温馨提示" message:@"按钮没有配置，请先配置" cancelButtonTitle:@"确定" otherButtonTitles:nil onDismiss:nil onCancel:^{
+            [self setOrderViewOpen:sender.orderObj];
+        }];
+        return;
+    }
+    
     if ([DataUtil getGlobalIsAddSence]) {//添加场景模式
         if ([SQLiteUtil getShoppingCarCount] >= 40) {
             [UIAlertView alertViewWithTitle:@"温馨提示"
@@ -532,55 +540,7 @@
     } else {
         if ([[DataUtil getGlobalModel] isEqualToString:Model_SetOrder]) {//设置命令模式
             
-            define_weakself;
-            self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
-            self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            self.setOrderView.backgroundColor = [UIColor clearColor];
-            self.setOrderView.orderId = sender.orderObj.OrderId;
-            NSString *orderCmd = sender.orderObj.OrderCmd;
-            if (![DataUtil checkNullOrEmpty:orderCmd])
-            {
-                NSString *handleOrderCmd = [orderCmd substringFromIndex:4];
-                if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [strCurModel_ isEqualToString:Model_ZKIp]) {//中控模式 不变
-                    self.setOrderView.tfOrder.text = handleOrderCmd;
-                    self.setOrderView.btnAsc.selected = NO;
-                } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)
-                    
-                    if ([sender.orderObj.Hora isEqualToString:@"1"]) { //转ASCII
-                        NSData *data = [handleOrderCmd hexToBytes];
-                        NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
-                        self.setOrderView.tfOrder.text = result;
-                        self.setOrderView.btnAsc.selected = YES;
-                    } else {
-                        self.setOrderView.tfOrder.text = handleOrderCmd;
-                        self.setOrderView.btnAsc.selected = NO;
-                    }
-                }
-            } else {
-                self.setOrderView.tfOrder.text = @"";
-                self.setOrderView.btnAsc.selected = NO;
-            }
-            
-            [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address,NSString *hoar){
-                sender.orderObj.OrderCmd = orderCmd;
-                sender.orderObj.Address = address;
-                sender.orderObj.Hora = hoar;
-            }];
-            [self.setOrderView setErrorBlock:^{
-                weakSelf.setIpView = [SetIpView viewFromDefaultXib];
-                weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
-                weakSelf.setIpView.backgroundColor = [UIColor clearColor];
-                weakSelf.setIpView.deviceId = sender.orderObj.DeviceId;
-                [weakSelf.setIpView fillContent:sender.orderObj.DeviceId];
-                [weakSelf.setIpView setCancleBlock:^{
-                    [weakSelf.setIpView removeFromSuperview];
-                }];
-                [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
-                }];
-                
-                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
-            }];
-            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
+            [self setOrderViewOpen:sender.orderObj];
             
             return;
         }
@@ -590,6 +550,59 @@
 
 #pragma mark -
 #pragma mark Custom Methods
+
+-(void)setOrderViewOpen:(Order *)orderObj
+{
+    define_weakself;
+    self.setOrderView = [SetDeviceOrderView viewFromDefaultXib];
+    self.setOrderView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.setOrderView.backgroundColor = [UIColor clearColor];
+    self.setOrderView.orderId = orderObj.OrderId;
+    NSString *orderCmd = orderObj.OrderCmd;
+    if (![DataUtil checkNullOrEmpty:orderCmd])
+    {
+        NSString *handleOrderCmd = [orderCmd substringFromIndex:4];
+        if ([strCurModel_ isEqualToString:Model_ZKDOMAIN] || [strCurModel_ isEqualToString:Model_ZKIp]) {//中控模式 不变
+            self.setOrderView.tfOrder.text = handleOrderCmd;
+            self.setOrderView.btnAsc.selected = NO;
+        } else { //紧急模式(修改Order取值显示出来的时候省略4个字节；之后如果返回命令冒号后为“1”表示为ASCII码，将省略4字节后的报文，转化为ASCII码，2个为一组；“0”表示原声为16进制，无需更改)
+            
+            if ([orderObj.Hora isEqualToString:@"1"]) { //转ASCII
+                NSData *data = [handleOrderCmd hexToBytes];
+                NSString *result = [[NSString alloc] initWithData:data  encoding:NSUTF8StringEncoding];
+                self.setOrderView.tfOrder.text = result;
+                self.setOrderView.btnAsc.selected = YES;
+            } else {
+                self.setOrderView.tfOrder.text = handleOrderCmd;
+                self.setOrderView.btnAsc.selected = NO;
+            }
+        }
+    } else {
+        self.setOrderView.tfOrder.text = @"";
+        self.setOrderView.btnAsc.selected = NO;
+    }
+    
+    [self.setOrderView setConfirmBlock:^(NSString *orderCmd,NSString *address,NSString *hoar){
+        orderObj.OrderCmd = orderCmd;
+        orderObj.Address = address;
+        orderObj.Hora = hoar;
+    }];
+    [self.setOrderView setErrorBlock:^{
+        weakSelf.setIpView = [SetIpView viewFromDefaultXib];
+        weakSelf.setIpView.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, weakSelf.view.frame.size.height);
+        weakSelf.setIpView.backgroundColor = [UIColor clearColor];
+        weakSelf.setIpView.deviceId = orderObj.DeviceId;
+        [weakSelf.setIpView fillContent:orderObj.DeviceId];
+        [weakSelf.setIpView setCancleBlock:^{
+            [weakSelf.setIpView removeFromSuperview];
+        }];
+        [weakSelf.setIpView setComfirmBlock:^(NSString *ip) {
+        }];
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setIpView];
+    }];
+    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.setOrderView];
+}
 
 //配置菜单
 -(void)showRightMenu
