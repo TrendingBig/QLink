@@ -17,9 +17,7 @@
 #import "RegisterViewController.h"
 
 @interface LoginViewController ()
-{
-    Member *_loginMember;
-}
+
 @property (weak, nonatomic) IBOutlet UIImageView *ivLogo;
 
 @end
@@ -73,7 +71,12 @@
             self.lblCompany.text = control.Jsname;
         }
         if (control.Jslogo) {
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"logo.png"]];
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSString *path = [[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"logo.png"];
+            if (![fileManager fileExistsAtPath:path]) {
+                return;
+            }
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             self.ivLogo.image = image;
         }
     }
@@ -94,71 +97,81 @@
 
 -(void)initRequestActionLogin
 {
-    [SVProgressHUD showWithStatus:@"正在验证..." maskType:SVProgressHUDMaskTypeClear];
+    NSString *key = self.tfKey.text;
+    NSString *name = self.tfName.text;
+    NSString *pwd = self.tfPassword.text;
     
-    //当前登录信息
-    _loginMember = [Member new];
-    _loginMember.uKey = self.tfKey.text;
-    _loginMember.uName = self.tfName.text;
-    _loginMember.uPwd = self.tfPassword.text;
-    _loginMember.isRemeber = self.btnRemeber.selected;
-    self.pLoginMember = _loginMember;
+    //判断登录是否为空
+    if ([DataUtil checkNullOrEmpty:key] || [DataUtil checkNullOrEmpty:name] || [DataUtil checkNullOrEmpty:pwd]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                        message:@"请输入完整的信息"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil, nil];
+        
+        [alert show];
+        
+        return;
+    }
     
-    NSString *sUrl = [NetworkUtil getActionLogin:_tfName.text andUPwd:_tfPassword.text andUKey:_tfKey.text];
+    [Member setTempLoginUdMember:name
+                         andUPwd:pwd
+                         andUKey:key
+                    andIsRemeber:self.btnRemeber.selected];
+    
+    [SVProgressHUD showWithStatus:@"正在验证..."];
+    
+    NSString *sUrl = [NetworkUtil getActionLogin:name andUPwd:pwd andUKey:key];
     NSURL *url = [NSURL URLWithString:sUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-    __weak __typeof(self)weakSelf = self;
+    define_weakself;
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
-    {
-        NSString *sConfig = [[NSString alloc] initWithData:responseObject encoding:[DataUtil getGB2312Code]];
-        NSRange range = [sConfig rangeOfString:@"error"];
-        if (range.location != NSNotFound)
-        {
-            NSArray *errorArr = [sConfig componentsSeparatedByString:@":"];
-            if (errorArr.count > 1) {
-                [SVProgressHUD showErrorWithStatus:errorArr[1]];
-                return;
-            }
-        }
-        
-        NSArray *configArr = [sConfig componentsSeparatedByString:@"|"];
-        if ([configArr count] < 2) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                            message:@"您输入的信息有误,请联系厂家"
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"关闭"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
-            
-            [SVProgressHUD dismiss];
-            
-            return;
-        }
-        
-        //处理配置信息
-        Config *configTempObj = [Config getTempConfig:configArr];//临时变量，存储Action=login请求对象
-        weakSelf.pConfigTemp = configTempObj;
-
-        if ([DataUtil isWifiNewWork]) {
-            if (!configTempObj.isSetIp) {//需要配置ip
-                [weakSelf fetchIp];
-            } else {
-                [weakSelf actionNULL];
-            }
-        } else {
-            [weakSelf actionNULL];
-        }
-    }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        Member *curMember = [Member getMember];
-        if (curMember && [curMember.uKey isEqualToString:self.pLoginMember.uKey] && [curMember.uName isEqualToString:self.pLoginMember.uName] &&[curMember.uPwd isEqualToString:self.pLoginMember.uPwd]) {
-            weakSelf.pConfigTemp = [Config getConfig];
-            [weakSelf actionNULL];
-        } else {
-            [SVProgressHUD showErrorWithStatus:@"请确认网络链接\n或输入有效账号"];
-        }
-    }];
+     {
+         NSString *sConfig = [[NSString alloc] initWithData:responseObject encoding:[DataUtil getGB2312Code]];
+         NSRange range = [sConfig rangeOfString:@"error"];
+         if (range.location != NSNotFound)
+         {
+             NSArray *errorArr = [sConfig componentsSeparatedByString:@":"];
+             if (errorArr.count > 1) {
+                 [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                 return;
+             }
+         }
+         
+         NSArray *configArr = [sConfig componentsSeparatedByString:@"|"];
+         if ([configArr count] < 2) {
+             [SVProgressHUD showErrorWithStatus:@"您输入的信息有误,请联系厂家"];
+             return;
+         }
+         
+         //处理返回结果的配置信息
+         Config *configTempObj = [Config getTempConfig:configArr];
+         weakSelf.pConfigTemp = configTempObj;
+         
+         if ([DataUtil isWifiNewWork]) {
+             if (!configTempObj.isSetIp) {//需要配置ip
+                 [weakSelf fetchIp];
+             } else {
+                 [weakSelf actionNULL];
+             }
+         } else {
+             [weakSelf actionNULL];
+         }
+     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         Member *curMember = [Member getMember];
+         if (curMember &&
+             [curMember.uKey isEqualToString:key] &&
+             [curMember.uName isEqualToString:name] &&
+             [curMember.uPwd isEqualToString:pwd])
+         {
+             weakSelf.pConfigTemp = [Config getConfig];
+             [weakSelf actionNULL];
+         } else {
+             [SVProgressHUD showErrorWithStatus:@"请确认网络链接\n或输入有效账号"];
+         }
+     }];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [queue addOperation:operation];
@@ -234,7 +247,7 @@
 {
     [SVProgressHUD showWithStatus:@"正在配置ip..." maskType:SVProgressHUDMaskTypeClear];
     
-    NSString *sUrl = [NetworkUtil handleIpRequest:self.pLoginMember];
+    NSString *sUrl = [NetworkUtil handleIpRequest:[Member getTempLoginMember]];
     NSURL *url = [NSURL URLWithString:sUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     
@@ -265,7 +278,9 @@
 
 -(void)requestSetUpIp
 {
-    NSString *sUrl = [NetworkUtil getSetUpIp:_tfName.text andPwd:_tfPassword.text andKey:_tfKey.text];
+    Member *member = [Member getTempLoginMember];
+    
+    NSString *sUrl = [NetworkUtil getSetUpIp:member.uName andPwd:member.uPwd andKey:member.uKey];
     NSURL *url = [NSURL URLWithString:sUrl];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];

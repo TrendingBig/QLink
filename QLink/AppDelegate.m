@@ -52,6 +52,12 @@
 {
     Control *control = [SQLiteUtil getControlObj];
     if (control && control.OpenPic) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *path = [[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"help.png"];
+        if (![fileManager fileExistsAtPath:path]) {
+            return;
+        }
+        
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"help.png"]];
         UIImageView *ivDefault = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         ivDefault.image = image;

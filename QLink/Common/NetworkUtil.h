@@ -19,7 +19,7 @@
                     andUKey:(NSString *)uKey;
 
 //获取 Action URL
-+(NSString *)getAction:(NSString *)action;
++(NSString *)getAction:(NSString *)action andMember:(Member *)loginUser;
 
 +(NSString *)getRegisterUrl:(NSString *)uName
                      andPwd:(NSString *)uPwd

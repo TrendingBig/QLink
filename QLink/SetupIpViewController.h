@@ -21,7 +21,6 @@
 }
 
 @property(nonatomic,assign) int iTimeoutCount;
-@property(nonatomic,weak) Member *pLoginMember;
 @property(nonatomic,strong) Config *pConfigTemp;
 
 -(void)load_setIpSocket:(NSDictionary *)dic;

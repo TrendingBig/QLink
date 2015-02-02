@@ -273,6 +273,41 @@
     [ud synchronize];
 }
 
+//设置登录临时对象信息
++(void)setTempLoginUdMember:(NSString *)uName
+                    andUPwd:(NSString *)uPwd
+                    andUKey:(NSString *)uKey
+               andIsRemeber:(BOOL)isRemeber
+{
+    NSMutableDictionary *memberDict = [[NSMutableDictionary alloc] init];
+    [memberDict setObject:uName forKey:@"uName"];
+    [memberDict setObject:uPwd forKey:@"uPwd"];
+    [memberDict setObject:uKey forKey:@"uKey"];
+    [memberDict setObject:[NSNumber numberWithBool:isRemeber] forKey:@"isRemeber"];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:memberDict forKey:@"MEMBER_UD_LOGIN_TEMP"];
+    [ud synchronize];
+}
+
+//获取Ud对象用户信息
++(Member *)getTempLoginMember
+{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSDictionary *memberDict = [ud objectForKey:@"MEMBER_UD_LOGIN_TEMP"];
+    if (!memberDict) {
+        return nil;
+    }
+    
+    Member *memberObj = [[Member alloc] init];
+    memberObj.uName = [memberDict objectForKey:@"uName"];
+    memberObj.uPwd = [memberDict objectForKey:@"uPwd"];
+    memberObj.uKey = [memberDict objectForKey:@"uKey"];
+    memberObj.isRemeber = [[memberDict objectForKey:@"isRemeber"] boolValue];
+    
+    return memberObj;
+}
+
 @end
 
 /*************************************** 配置信息 *********************************************/

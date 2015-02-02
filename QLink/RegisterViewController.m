@@ -65,7 +65,12 @@
     
     Control *control = [SQLiteUtil getControlObj];
     if (control && control.Jslogo) {
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"logo.png"]];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *path = [[DataUtil getDirectoriesInDomains] stringByAppendingPathComponent:@"logo.png"];
+        if (![fileManager fileExistsAtPath:path]) {
+            return;
+        }
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
         self.ivLogo.image = image;
     }
 }

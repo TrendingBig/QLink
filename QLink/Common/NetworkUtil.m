@@ -34,10 +34,20 @@
     return [NSString stringWithFormat:@"http://qlink.cc/zq/reg.asp?usname=%@&psword=%@&icode=%@",uName,uPwd,icode];
 }
 
+////获取 Action URL
+//+(NSString *)getAction:(NSString *)action
+//{
+//    return [NSString stringWithFormat:@"%@&action=%@",[self getBaseUrl],action];
+//}
+
 //获取 Action URL
-+(NSString *)getAction:(NSString *)action
++(NSString *)getAction:(NSString *)action andMember:(Member *)loginUser
 {
-    return [NSString stringWithFormat:@"%@&action=%@",[self getBaseUrl],action];
+    //登录请求，因为这时候，Member 全局变量还没被覆盖最新的，到Action=null请求时，才为最新的
+    //而其他请求，比如说中控等，是传入登录成功的用户
+    NSString *baseUrl = [NSString stringWithFormat:@"http://qlink.cc/zq/lookmobile.asp?uname=%@&upsd=%@&passkey=%@",loginUser.uName,loginUser.uPwd,loginUser.uKey];
+    
+    return [NSString stringWithFormat:@"%@&action=%@",baseUrl,action];
 }
 
 //获取设置ip地址

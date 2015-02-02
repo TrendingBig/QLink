@@ -224,7 +224,7 @@
     self.iTimeoutCount = 1;
     [orderDicArr_ removeObjectAtIndex:0];
     if ([orderDicArr_ count] == 0) {
-        NSString *sUrl = [NetworkUtil getAction:ACTIONSETUPIPOK];
+        NSString *sUrl = [NetworkUtil getAction:ACTIONSETUPIPOK andMember:[Member getTempLoginMember]];
         NSURL *url = [NSURL URLWithString:sUrl];
 //        NSURLRequest *request = [NSURLRequest requestWithURL:url];
         
@@ -233,6 +233,17 @@
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
          {
+             NSString *strResult = operation.responseString;
+             NSRange range = [strResult rangeOfString:@"error"];
+             if (range.location != NSNotFound)
+             {
+                 NSArray *errorArr = [strResult componentsSeparatedByString:@":"];
+                 if (errorArr.count > 1) {
+                     [SVProgressHUD showErrorWithStatus:errorArr[1]];
+                     return;
+                 }
+             }
+             
              [self actionNULL];
              
          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -258,21 +269,23 @@
 -(void)actionNULL
 {
     NSString *curVersion = [SQLiteUtil getCurVersionNo];
+    
     Member *curMember = [Member getMember];
-   
+    Member *tempMember = [Member getTempLoginMember];
+    
     //重新解析配置文件
-    if ((curMember && ![curMember.uKey isEqualToString:self.pLoginMember.uKey])) {//更换用户
+    if ((curMember && ![curMember.uKey isEqualToString:tempMember.uKey])) {//更换用户
         //清除本地配置数据
         [SQLiteUtil clearData];
     }
     
     //设置登录信息
-    [Member setUdMember:_pLoginMember.uName
-                andUPwd:_pLoginMember.uPwd
-                andUKey:_pLoginMember.uKey
-           andIsRemeber:_pLoginMember.isRemeber];
+    [Member setUdMember:tempMember.uName
+                andUPwd:tempMember.uPwd
+                andUKey:tempMember.uKey
+           andIsRemeber:tempMember.isRemeber];
     
-    if ((curMember && ![curMember.uKey isEqualToString:_pLoginMember.uKey]) || ![_pConfigTemp.configVersion isEqualToString:curVersion])//更换用户或者版本号不同则重新请求配置文件
+    if ((curMember && ![curMember.uKey isEqualToString:tempMember.uKey]) || ![_pConfigTemp.configVersion isEqualToString:curVersion])//更换用户或者版本号不同则重新请求配置文件
     {
         ActionNullClass *actionNullClass = [[ActionNullClass alloc] init];
         actionNullClass.delegate = self;
