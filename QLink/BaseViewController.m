@@ -244,11 +244,8 @@
         [asyncSocket_ writeData:data withTimeout:-1 tag:-1];
     } else {
         sendContent_ = order.RemotCmd;
-        
         Control *controlObj = [SQLiteUtil getControlObj];
-        
         NSArray *listItems = [controlObj.qServer componentsSeparatedByString:@":"];
-        
         [self initTcp: listItems[0] andPort:listItems[1]];
     }
 }
