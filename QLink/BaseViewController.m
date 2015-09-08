@@ -509,6 +509,11 @@
                 
                 break;
             }
+            case SocketTypeRemoteIp:
+            {
+                
+                break;
+            }
             default:
                 break;
         }
@@ -551,7 +556,7 @@
         }
         case SocketTypeRemoteIp:
         {
-            
+            break;
         }
         default:
             break;
@@ -713,7 +718,10 @@
         }
         case SocketTypeEmergency:
         {
-            
+            break;
+        }
+        case SocketTypeRemoteIp:
+        {
             break;
         }
         default:
