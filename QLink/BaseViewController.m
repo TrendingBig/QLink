@@ -74,8 +74,7 @@
             } else if ([so isEqualToString:Model_ZKDOMAIN]){
                 self.socketType = SocketTypeNormal;
                 [self sendNormalDomainSocketOrder:order.OrderCmd];
-            }
-            else if([so isEqualToString:Model_JJ]) { //紧急模式
+            } else if([so isEqualToString:Model_JJ]) { //紧急模式
                 self.socketType = SocketTypeEmergency;
 
                 dispatch_queue_t queue = dispatch_queue_create("name", NULL);
@@ -83,10 +82,13 @@
                 dispatch_async(queue, ^{
                     [self initEmergencySocketOrder:order];
                 });
-            } else if ([so isEqualToString:Model_Study])
-            {
+            } else if ([so isEqualToString:Model_Study]) {
                 self.socketType = SocketTypeStudy;
                 [self initStudySocketOrder:order.StudyCmd andAddress:order.Address];
+            } else if ([so isEqualToString:Model_RemoteIp]) {
+                self.socketType = SocketTypeRemote;
+                
+                // todo
             }
             break;
         }

@@ -37,6 +37,8 @@
 @property(nonatomic,strong) NSString *Jslogo;
 @property(nonatomic,strong) NSString *Jsqq;
 @property(nonatomic,strong) NSString *OpenPic;
+@property(nonatomic,strong) NSString *qServer;
+@property(nonatomic,strong) NSString *HouseId;
 
 +(Control *)setIp:(NSString *)ip
       andSendType:(NSString *)sendType
@@ -50,7 +52,9 @@
       andJsaddess:(NSString *)jsaddess
         andJslogo:(NSString *)jslogo
           andJsqq:(NSString *)jsqq
-       andOpenPic:(NSString *)openPic;
+       andOpenPic:(NSString *)openPic
+       andQServer:(NSString *)qServer
+       andHouseId:(NSString *)houseId;
 
 @end
 
@@ -86,6 +90,7 @@
 @property(nonatomic,strong) NSString *Type;
 @property(nonatomic,strong) NSString *SubType;
 @property(nonatomic,strong) NSString *OrderCmd;
+@property(nonatomic,strong) NSString *RemotCmd;
 @property(nonatomic,strong) NSString *Address;
 @property(nonatomic,strong) NSString *StudyCmd;
 @property(nonatomic,strong) NSString *HouseId;
@@ -103,6 +108,7 @@
              andType:(NSString *)type
           andSubType:(NSString *)subType
          andOrderCmd:(NSString *)orderCmd
+         andRemotCmd:(NSString *)remotCmd
           andAddress:(NSString *)address
          andStudyCmd:(NSString *)studyCmd
           andOrderNo:(NSString *)orderNo

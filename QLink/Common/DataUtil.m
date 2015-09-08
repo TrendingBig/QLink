@@ -329,53 +329,9 @@
     obj.isWriteCenterControl = [[objDic objectForKey:@"isWriteCenterControl"] boolValue];
     obj.isSetIp = [[objDic objectForKey:@"isSetIp"] boolValue];
     obj.isBuyCenterControl = [[objDic objectForKey:@"isBuyCenterControl"] boolValue];
+    obj.isRemoteIp = [[objDic objectForKey:@"isRemoteIp"] boolValue];
     
     return obj;
-}
-
-//设置配置信息
-+(void)setConfigArr:(NSArray *)configArr
-{
-    NSMutableDictionary *memberDict = [[NSMutableDictionary alloc] init];
-    
-    //配置文件版本
-    [memberDict setObject:[configArr objectAtIndex:1] forKey:@"configVersion"];
-    
-    //是否配置过标记，未配置则强制进入配置模式
-    NSString *sIsSetSign = [configArr objectAtIndex:3];
-    BOOL bIsSetSign = NO;
-    if ([[sIsSetSign uppercaseString] isEqualToString:@"TRUE"]) {
-        bIsSetSign = YES;
-    }
-    [memberDict setObject:[NSNumber numberWithBool:bIsSetSign] forKey:@"isSetSign"];
-    
-    //是否写入中控
-    NSString *sIsWriteCenterControl = [configArr objectAtIndex:4];
-    BOOL bIsWriteCenterControl = NO;
-    if ([[sIsWriteCenterControl uppercaseString] isEqualToString:@"TRUE"]) {
-        bIsWriteCenterControl = YES;
-    }
-    [memberDict setObject:[NSNumber numberWithBool:bIsWriteCenterControl] forKey:@"isWriteCenterControl"];
-    
-    //是否设置 IP
-    NSString *sIsSetIp = [configArr objectAtIndex:5];
-    BOOL bIsSetIp = NO;
-    if ([[sIsSetIp uppercaseString] isEqualToString:@"TRUE"]) {
-        bIsSetIp = YES;
-    }
-    [memberDict setObject:[NSNumber numberWithBool:bIsSetIp] forKey:@"isSetIp"];
-    
-    //是否购买中控
-    NSString *sIsBuyCenterControl = [configArr objectAtIndex:6];
-    BOOL bIsBuyCenterControl = NO;
-    if ([[sIsBuyCenterControl uppercaseString] isEqualToString:@"TRUE"]) {
-        bIsBuyCenterControl = YES;
-    }
-    [memberDict setObject:[NSNumber numberWithBool:bIsBuyCenterControl]forKey:@"isBuyCenterControl"];
-    
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:memberDict forKey:@"CONFIG_UD"];
-    [ud synchronize];
 }
 
 //设置配置信息
@@ -397,6 +353,9 @@
     
     //是否购买中控
     [memberDict setObject:[NSNumber numberWithBool:obj.isBuyCenterControl]forKey:@"isBuyCenterControl"];
+    
+    //是否启用远程Ip
+    [memberDict setObject:[NSNumber numberWithBool:obj.isRemoteIp]forKey:@"isRemoteIp"];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [ud setObject:memberDict forKey:@"CONFIG_UD"];
@@ -442,6 +401,14 @@
     }
     obj.isBuyCenterControl = bIsBuyCenterControl;
     
+    //是否启用远程Ip
+    NSString *sIsRemoteIp = [configArr objectAtIndex:7];
+    BOOL bIsRemoteIp = NO;
+    if ([[sIsRemoteIp uppercaseString] isEqualToString:@"TRUE"]) {
+        bIsRemoteIp = YES;
+    }
+    obj.isRemoteIp = bIsRemoteIp;
+    
     return obj;
 }
 
@@ -463,7 +430,7 @@
 //中控信息sql
 +(NSString *)connectControlSql:(Control *)obj
 {
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO CONTROL (\"Ip\", \"SendType\", \"Port\", \"Domain\", \"Url\", \"Updatever\",\"Jsname\",\"Jstel\",\"Jsuname\",\"Jsaddess\", \"Jslogo\", \"Jsqq\",\"OpenPic\") VALUES (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\",\"%@\")",obj.Ip, obj.SendType, obj.Port, obj.Domain, obj.Url, obj.Updatever,obj.Jsname,obj.Jstel,obj.Jsuname,obj.Jsaddess,obj.Jslogo,obj.Jsqq,obj.OpenPic];
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO CONTROL (\"Ip\", \"SendType\", \"Port\", \"Domain\", \"Url\", \"Updatever\",\"Jsname\",\"Jstel\",\"Jsuname\",\"Jsaddess\", \"Jslogo\", \"Jsqq\",\"OpenPic\",\"Qserver\",\"HouseId\") VALUES (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\",\"%@\")",obj.Ip, obj.SendType, obj.Port, obj.Domain, obj.Url, obj.Updatever,obj.Jsname,obj.Jstel,obj.Jsuname,obj.Jsaddess,obj.Jslogo,obj.Jsqq,obj.OpenPic,obj.qServer,obj.HouseId];
     
     return sql;
 }
@@ -478,7 +445,7 @@
 //命令表sql拼接
 +(NSString *)connectOrderSql:(Order *)obj
 {
-    NSString *sql = [NSString stringWithFormat:@"INSERT INTO ORDERS (\"OrderId\", \"OrderName\", \"Type\", \"SubType\" , \"OrderCmd\", \"Address\", \"StudyCmd\",\"OrderNo\", \"HouseId\", \"LayerId\", \"RoomId\", \"DeviceId\",\"Hora\") VALUES  (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\" , \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\",\"%@\")",obj.OrderId, obj.OrderName,obj.Type, obj.SubType , obj.OrderCmd,obj.Address, obj.StudyCmd,obj.OrderNo, obj.HouseId, obj.LayerId, obj.RoomId, obj.DeviceId,obj.Hora];
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO ORDERS (\"OrderId\", \"OrderName\", \"Type\", \"SubType\" , \"OrderCmd\",\"RemotCmd\", \"Address\", \"StudyCmd\",\"OrderNo\", \"HouseId\", \"LayerId\", \"RoomId\", \"DeviceId\",\"Hora\") VALUES  (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\" , \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\",\"%@\")",obj.OrderId, obj.OrderName,obj.Type, obj.SubType , obj.OrderCmd,obj.RemotCmd,obj.Address, obj.StudyCmd,obj.OrderNo, obj.HouseId, obj.LayerId, obj.RoomId, obj.DeviceId,obj.Hora];
     return sql;
 }
 
@@ -945,6 +912,7 @@
                                         andType:[rs stringForColumn:@"Type"]
                                      andSubType:[rs stringForColumn:@"SubType"]
                                     andOrderCmd:[rs stringForColumn:@"OrderCmd"]
+                                    andRemotCmd:[rs stringForColumn:@"RemotCmd"]
                                      andAddress:[rs stringForColumn:@"Address"]
                                     andStudyCmd:[rs stringForColumn:@"StudyCmd"]
                                      andOrderNo:[rs stringForColumn:@"OrderNo"]
@@ -981,6 +949,7 @@
                                    andType:[rs stringForColumn:@"Type"]
                                 andSubType:[rs stringForColumn:@"SubType"]
                                andOrderCmd:[rs stringForColumn:@"OrderCmd"]
+                               andRemotCmd:[rs stringForColumn:@"RemotCmd"]
                                 andAddress:[rs stringForColumn:@"Address"]
                                andStudyCmd:[rs stringForColumn:@"StudyCmd"]
                                 andOrderNo:[rs stringForColumn:@"OrderNo"]
@@ -1217,7 +1186,9 @@
                      andJsaddess:[rs stringForColumn:@"Jsaddess"]
                        andJslogo:[rs stringForColumn:@"Jslogo"]
                          andJsqq:[rs stringForColumn:@"Jsqq"]
-                      andOpenPic:[rs stringForColumn:@"OpenPic"]];
+                      andOpenPic:[rs stringForColumn:@"OpenPic"]
+                      andQServer:[rs stringForColumn:@"Qserver"]
+                      andHouseId:[rs stringForColumn:@"HouseId"]];
         }
     }
     

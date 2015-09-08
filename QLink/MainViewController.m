@@ -821,38 +821,42 @@
 {
     //设置当前模式
     Config *configObj = [Config getConfig];
-    if (configObj.isBuyCenterControl) {//购买中控
-        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
-        [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-            switch (status) {
-                case AFNetworkReachabilityStatusReachableViaWWAN:
-                {
-                    [DataUtil setGlobalModel:Model_ZKDOMAIN];
-                    break;
-                }
-                case AFNetworkReachabilityStatusReachableViaWiFi:
-                {   
-                    Control *control = [SQLiteUtil getControlObj];
-                    [SimplePingHelper ping:control.Ip
-                                    target:self
-                                       sel:@selector(pingResult:)];
-                    break;
-                }
-                case AFNetworkReachabilityStatusNotReachable:{
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
-                                                                        message:@"连接失败\n请确认网络是否连接." delegate:nil
-                                                              cancelButtonTitle:@"关闭"
-                                                              otherButtonTitles:nil, nil];
-                    [alertView show];
-                    break ;
-                }
-                default:
-                    break;
-            };
-        }];
-    
+    if (configObj.isRemoteIp) { //是否远程Ip，优先级最大
+        [DataUtil setGlobalModel:Model_RemoteIp];
     } else {
-        [DataUtil setGlobalModel:Model_JJ];
+        if (configObj.isBuyCenterControl) {//购买中控
+            [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+            [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+                switch (status) {
+                    case AFNetworkReachabilityStatusReachableViaWWAN:
+                    {
+                        [DataUtil setGlobalModel:Model_ZKDOMAIN];
+                        break;
+                    }
+                    case AFNetworkReachabilityStatusReachableViaWiFi:
+                    {
+                        Control *control = [SQLiteUtil getControlObj];
+                        [SimplePingHelper ping:control.Ip
+                                        target:self
+                                           sel:@selector(pingResult:)];
+                        break;
+                    }
+                    case AFNetworkReachabilityStatusNotReachable:{
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示"
+                                                                            message:@"连接失败\n请确认网络是否连接." delegate:nil
+                                                                  cancelButtonTitle:@"关闭"
+                                                                  otherButtonTitles:nil, nil];
+                        [alertView show];
+                        break ;
+                    }
+                    default:
+                        break;
+                };
+            }];
+            
+        } else {
+            [DataUtil setGlobalModel:Model_JJ];
+        }
     }
 }
 

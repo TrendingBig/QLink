@@ -378,7 +378,6 @@
 		8A22508A1A6575A500AD29DE /* SetDeviceOrderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */; };
 		8A2256AD19E822A3009F7D03 /* sence_cancle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AB19E822A3009F7D03 /* sence_cancle.png */; };
 		8A2256AE19E822A3009F7D03 /* sence_cancle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */; };
-		8A247BE41A6E9F4200057C85 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A247BE31A6E9F4200057C85 /* QLink.sqlite */; };
 		8A25548819EA1C360031B9F4 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */; };
 		8A25548919EA1C360031B9F4 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25548719EA1C360031B9F4 /* GCDAsyncUdpSocket.m */; };
 		8A25549319EA36A90031B9F4 /* NSString+NSStringHexToBytes.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25549219EA36A90031B9F4 /* NSString+NSStringHexToBytes.m */; };
@@ -438,6 +437,7 @@
 		8A64BF1B19FB5BCA007DBF9D /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A64BF1719FB5BCA007DBF9D /* Icon-40.png */; };
 		8A64BF1C19FB5BCA007DBF9D /* Icon-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A64BF1819FB5BCA007DBF9D /* Icon-50.png */; };
 		8A64BF1D19FB5BCA007DBF9D /* Icon-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A64BF1919FB5BCA007DBF9D /* Icon-80.png */; };
+		8A6DC3B11B9F2C46002ADE89 /* QLink.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8A6DC3B01B9F2C46002ADE89 /* QLink.sqlite */; };
 		8A74CBB719E4378D006E3175 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A74CBB619E4378D006E3175 /* libz.1.1.3.dylib */; };
 		8A908ED71A0E511300AF9FB9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A908ED61A0E511300AF9FB9 /* AudioToolbox.framework */; };
 		8A97414D19CC877400E409A6 /* NetworkUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A97414C19CC877400E409A6 /* NetworkUtil.m */; };
@@ -947,7 +947,6 @@
 		8A2250891A6575A500AD29DE /* SetDeviceOrderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetDeviceOrderView.xib; sourceTree = "<group>"; };
 		8A2256AB19E822A3009F7D03 /* sence_cancle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sence_cancle.png; sourceTree = "<group>"; };
 		8A2256AC19E822A3009F7D03 /* sence_cancle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sence_cancle@2x.png"; sourceTree = "<group>"; };
-		8A247BE31A6E9F4200057C85 /* QLink.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = QLink.sqlite; sourceTree = "<group>"; };
 		8A25548419EA1C360031B9F4 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 		8A25548519EA1C360031B9F4 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		8A25548619EA1C360031B9F4 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
@@ -1033,6 +1032,7 @@
 		8A64BF1719FB5BCA007DBF9D /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-40.png"; sourceTree = "<group>"; };
 		8A64BF1819FB5BCA007DBF9D /* Icon-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-50.png"; sourceTree = "<group>"; };
 		8A64BF1919FB5BCA007DBF9D /* Icon-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-80.png"; sourceTree = "<group>"; };
+		8A6DC3B01B9F2C46002ADE89 /* QLink.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = QLink.sqlite; sourceTree = "<group>"; };
 		8A74CBB619E4378D006E3175 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		8A908ED61A0E511300AF9FB9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8A97414B19CC877400E409A6 /* NetworkUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtil.h; sourceTree = "<group>"; };
@@ -1641,7 +1641,7 @@
 		8A97414A19CC875800E409A6 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				8A247BE31A6E9F4200057C85 /* QLink.sqlite */,
+				8A6DC3B01B9F2C46002ADE89 /* QLink.sqlite */,
 				3543487B19D10B2900B53359 /* iConPlist.plist */,
 				8A0738FE19DEEEE3001E6F45 /* DeviceConfigIconPlist.plist */,
 				35131F3619D4321E005A3C17 /* RemotePlist.plist */,
@@ -2359,7 +2359,7 @@
 				8A0738FA19DEEE63001E6F45 /* device_继电器.png in Resources */,
 				35A4E5E919D2ECE7007A3C30 /* nm_left@2x.png in Resources */,
 				8AD562DA19D716AD006E3285 /* light_br.png in Resources */,
-				8A247BE41A6E9F4200057C85 /* QLink.sqlite in Resources */,
+				8A6DC3B11B9F2C46002ADE89 /* QLink.sqlite in Resources */,
 				35A8A9B119D166470018EB67 /* ac_select@2x.png in Resources */,
 				35A4E61419D2F9B7007A3C30 /* ot_left@2x.png in Resources */,
 				8AAC54AB19F95F3A0094C2BC /* BsTcView.xib in Resources */,

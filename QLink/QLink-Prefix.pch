@@ -54,6 +54,7 @@
 #define Model_ZKDOMAIN @"Model_ZkDomain"//中控模式
 #define Model_ZKIp @"Model_ZkIp"//中控模式
 #define Model_JJ @"Model_Jj"//紧急模式
+#define Model_RemoteIp @"Model_RemoteIp"//远程Ip模式
 
 #define UDP_NAME @"udpSocket"
 

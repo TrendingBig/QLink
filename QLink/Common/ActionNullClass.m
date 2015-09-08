@@ -36,7 +36,8 @@
     
     NSString *sUrl = [NetworkUtil getBaseUrl];
     NSURL *url = [NSURL URLWithString:sUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
      {
@@ -85,7 +86,9 @@
                                   andJsaddess:[info objectForKey:@"_jsaddess"]
                                     andJslogo:[info objectForKey:@"_jslogo"]
                                       andJsqq:[info objectForKey:@"_jsqq"]
-                                   andOpenPic:[info objectForKey:@"_openpic"]];
+                                   andOpenPic:[info objectForKey:@"_openpic"]
+                                   andQServer:[info objectForKey:@"_qserver"]
+                                   andHouseId:[info objectForKey:@"_houseid"]];
          [sqlArr addObject:[SQLiteUtil connectControlSql:controlObj]];
          
          //logo下载
@@ -142,6 +145,7 @@
                                                          andType:[orderDic objectForKey:@"_type"]
                                                       andSubType:[orderDic objectForKey:@"_subtype"]
                                                      andOrderCmd:[orderDic objectForKey:@"_ordercmd"]
+                                                     andRemotCmd:[orderDic objectForKey:@"_remotcmd"]
                                                       andAddress:[orderDic objectForKey:@"_ades"]
                                                      andStudyCmd:studyCmd
                                                       andOrderNo:[orderDic objectForKey:@"_sn"]

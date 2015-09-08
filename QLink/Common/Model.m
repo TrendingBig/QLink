@@ -30,6 +30,8 @@
         andJslogo:(NSString *)jslogo
           andJsqq:(NSString *)jsqq
        andOpenPic:(NSString *)openPic
+       andQServer:(NSString *)qServer
+       andHouseId:(NSString *)houseId
 {
     Control *obj = [[Control alloc] init];
     obj.Ip = ip;
@@ -45,6 +47,8 @@
     obj.Jslogo = jslogo;
     obj.Jsqq = jsqq;
     obj.OpenPic = openPic;
+    obj.qServer = qServer;
+    obj.HouseId = houseId;
     return obj;
 }
 
@@ -84,6 +88,7 @@
           andType:(NSString *)type
        andSubType:(NSString *)subType
       andOrderCmd:(NSString *)orderCmd
+      andRemotCmd:(NSString *)remotCmd
        andAddress:(NSString *)address
       andStudyCmd:(NSString *)studyCmd
        andOrderNo:(NSString *)orderNo
@@ -99,6 +104,7 @@
     obj.Type = type;
     obj.SubType = subType;
     obj.OrderCmd = orderCmd;
+    obj.RemotCmd = remotCmd;
     obj.Address = address;
     obj.StudyCmd = studyCmd;
     obj.OrderNo = orderNo;

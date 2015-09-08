@@ -102,12 +102,10 @@
 @property(nonatomic,assign) BOOL isWriteCenterControl;//是否写入中控
 @property(nonatomic,assign) BOOL isSetIp;//是否配置中控IP
 @property(nonatomic,assign) BOOL isBuyCenterControl;//是否购买中控
+@property(nonatomic,assign) BOOL isRemoteIp;//启用远程Ip
 
 //获取配置信息
 +(Config *)getConfig;
-
-//设置配置信息
-+(void)setConfigArr:(NSArray *)configArr;
 
 //设置配置信息
 +(void)setConfigObj:(Config *)obj;
@@ -223,7 +221,7 @@
 //获取购物车数量
 +(int)getShoppingCarCount;
 
-//移除购物车的某条命令
+//移除购物车的某Ø条命令
 +(BOOL)removeShoppingCarByOrderId:(NSString *)orderId;
 
 //获取全局配置信息

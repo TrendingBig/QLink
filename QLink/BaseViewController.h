@@ -12,10 +12,11 @@
 #import "GCDAsyncUdpSocket.h"
 
 typedef NS_ENUM(NSInteger, SocketType){
-    SocketTypeNormal = 1,
-    SocketTypeEmergency = 2,
-    SocketTypeWriteZk = 3,
-    SocketTypeStudy = 4
+    SocketTypeNormal = 1, // 正常模式
+    SocketTypeEmergency = 2, // 紧急模式
+    SocketTypeWriteZk = 3, // 中控模式
+    SocketTypeStudy = 4, // 学习模式
+    SocketTypeRemote = 5 // 远程模式
 };
 
 typedef NS_ENUM(NSInteger, ZkOper){
