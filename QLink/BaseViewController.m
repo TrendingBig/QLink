@@ -35,6 +35,8 @@
     Order *sendDeviceObj_;//紧急模式下发送设备对象
     Control *zkConfig_;
     BOOL isSendZKFailAndSendLast_;
+    
+    BOOL isRemoteIpConnected_; // 远程模式连接成功
 }
 @end
 
@@ -87,8 +89,7 @@
                 [self initStudySocketOrder:order.StudyCmd andAddress:order.Address];
             } else if ([so isEqualToString:Model_RemoteIp]) {
                 self.socketType = SocketTypeRemoteIp;
-                
-                // todo
+                [self initRemoteIpSocketOrder:order];
             }
             break;
         }
@@ -227,9 +228,28 @@
     
     if ([[controlObj.SendType lowercaseString] isEqualToString:@"tcp"]) {
         [self initTcp:controlObj.Domain andPort:controlObj.Port];
-    }
-    else{
+    } else {
         [self initUdp:controlObj.Domain andPort:controlObj.Port];
+    }
+}
+
+#pragma mark -
+#pragma mark 远程模式发送场景，设备socket
+
+-(void)initRemoteIpSocketOrder:(Order *)order
+{
+    if (isRemoteIpConnected_) {
+        sendContent_ = order.RemotCmd;
+        NSData *data = [sendContent_ hexToBytes];
+        [asyncSocket_ writeData:data withTimeout:-1 tag:-1];
+    } else {
+        sendContent_ = order.RemotCmd;
+        
+        Control *controlObj = [SQLiteUtil getControlObj];
+        
+        NSArray *listItems = [controlObj.qServer componentsSeparatedByString:@":"];
+        
+        [self initTcp: listItems[0] andPort:listItems[1]];
     }
 }
 
@@ -449,11 +469,25 @@
 {
     NSLog(@"＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝\n");
     NSLog(@"连接成功\n");
-	NSLog(@"已连接到 －－ socket:%p didConnectToHost:%@ port:%hu \n", sock, host, port);
+    NSLog(@"已连接到 －－ socket:%p didConnectToHost:%@ port:%hu \n", sock, host, port);
     
-    NSData *data = [sendContent_ hexToBytes];
-    
-    [asyncSocket_ writeData:data withTimeout:-1 tag:-1];//发送数据;  withTimeout:超时时间，设置为－1代表永不超时;  tag:区别该次读取与其他读取的标志,通常我们在设计视图上的控件时也会有这样的一个属性就是tag;
+    NSData *data;
+    switch (self.socketType) {
+        case SocketTypeRemoteIp:
+        {
+            [sock readDataWithTimeout:-1 tag:-1];
+            break;
+        }
+        default:
+        {
+            data = [sendContent_ hexToBytes];
+            
+            // 发送数据;  withTimeout:超时时间，设置为－1代表永不超时;
+            // tag:区别该次读取与其他读取的标志,通常我们在设计视图上的控件时也会有这样的一个属性就是tag;
+            [sock writeData:data withTimeout:-1 tag:-1];
+            break;
+        }
+    }
 }
 
 //未成功连接
@@ -511,7 +545,9 @@
             }
             case SocketTypeRemoteIp:
             {
-                
+                if (isRemoteIpConnected_) {
+                    isRemoteIpConnected_ = false;
+                }
                 break;
             }
             default:
@@ -520,8 +556,14 @@
         
         NSLog(@"连接失败\n");
         NSLog(@"错误信息 －－ socketDidDisconnect:%p withError: %@", sock, err);
-    }else {
+        
+        
+    } else {
         NSLog(@"断开连接\n");
+        
+        if (isRemoteIpConnected_) {
+            isRemoteIpConnected_ = false;
+        }
     }
 }
 
@@ -722,6 +764,17 @@
         }
         case SocketTypeRemoteIp:
         {
+            // todo
+            // 判断是否为ff 11 11 11 11, 如果是，则发送HouseId
+            // 如果为ok, 则表示连接成功
+            
+            if (true) {
+                
+            } else {
+                
+            }
+
+            [sock readDataWithTimeout:-1 tag:-1];
             break;
         }
         default:
@@ -778,6 +831,10 @@
 -(void)disConnectionTCP
 {
     [asyncSocket_ disconnect];
+    
+    if (isRemoteIpConnected_) {
+        isRemoteIpConnected_ = false;
+    }
 }
 
 -(void)disConnectionUDP
@@ -802,6 +859,10 @@
     if (asyncSocket_ != nil) {
         if ([asyncSocket_ isConnected]) {
             [asyncSocket_ disconnect];
+            
+            if (isRemoteIpConnected_) {
+                isRemoteIpConnected_ = false;
+            }
         }
         asyncSocket_ = nil;
     }
