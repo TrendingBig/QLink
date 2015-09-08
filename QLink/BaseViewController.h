@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, SocketType){
     SocketTypeEmergency = 2, // 紧急模式
     SocketTypeWriteZk = 3, // 中控模式
     SocketTypeStudy = 4, // 学习模式
-    SocketTypeRemote = 5 // 远程模式
+    SocketTypeRemoteIp = 5 // 远程模式
 };
 
 typedef NS_ENUM(NSInteger, ZkOper){

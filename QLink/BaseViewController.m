@@ -86,7 +86,7 @@
                 self.socketType = SocketTypeStudy;
                 [self initStudySocketOrder:order.StudyCmd andAddress:order.Address];
             } else if ([so isEqualToString:Model_RemoteIp]) {
-                self.socketType = SocketTypeRemote;
+                self.socketType = SocketTypeRemoteIp;
                 
                 // todo
             }
@@ -364,12 +364,10 @@
 	switch (self.socketType) {
         case SocketTypeWriteZk:
         {
-            
             break;
         }
         case SocketTypeNormal:
         {
-
             break;
         }
         case SocketTypeEmergency:
@@ -551,6 +549,10 @@
             }
             break;
         }
+        case SocketTypeRemoteIp:
+        {
+            
+        }
         default:
             break;
     }
@@ -573,7 +575,7 @@
                 if (!isSendZKFailAndSendLast_) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         progressValue_ += avgValue_;
-                        NSString *strInfo = [NSString stringWithFormat:@"写入中控[%d/%d]",([cmdReadArr_ count]-[cmdOperArr_ count]),[cmdReadArr_ count]];
+                        NSString *strInfo = [NSString stringWithFormat:@"写入中控[%lu/%lu]",([cmdReadArr_ count]-[cmdOperArr_ count]),(unsigned long)[cmdReadArr_ count]];
                         
                         [SVProgressHUD showProgress:progressValue_ status:strInfo maskType:SVProgressHUDMaskTypeClear];
                     });
@@ -787,6 +789,13 @@
     if (udpSocket_ != nil) {
         [udpSocket_ close];
         udpSocket_ = nil;
+    }
+    
+    if (asyncSocket_ != nil) {
+        if ([asyncSocket_ isConnected]) {
+            [asyncSocket_ disconnect];
+        }
+        asyncSocket_ = nil;
     }
 }
 
