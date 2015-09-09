@@ -330,6 +330,7 @@
     obj.isSetIp = [[objDic objectForKey:@"isSetIp"] boolValue];
     obj.isBuyCenterControl = [[objDic objectForKey:@"isBuyCenterControl"] boolValue];
     obj.isRemoteIp = [[objDic objectForKey:@"isRemoteIp"] boolValue];
+    obj.userId = [objDic objectForKey:@"UserId"];
     
     return obj;
 }
@@ -356,6 +357,9 @@
     
     //是否启用远程Ip
     [memberDict setObject:[NSNumber numberWithBool:obj.isRemoteIp]forKey:@"isRemoteIp"];
+    
+    //用户ID
+    [memberDict setObject:obj.userId forKey:@"UserId"];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [ud setObject:memberDict forKey:@"CONFIG_UD"];
@@ -408,6 +412,9 @@
         bIsRemoteIp = YES;
     }
     obj.isRemoteIp = bIsRemoteIp;
+    
+    //用户ID
+    obj.userId = [configArr objectAtIndex:8];
     
     return obj;
 }

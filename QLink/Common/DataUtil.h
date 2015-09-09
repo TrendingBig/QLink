@@ -103,6 +103,7 @@
 @property(nonatomic,assign) BOOL isSetIp;//是否配置中控IP
 @property(nonatomic,assign) BOOL isBuyCenterControl;//是否购买中控
 @property(nonatomic,assign) BOOL isRemoteIp;//启用远程Ip
+@property(nonatomic,strong) NSString *userId;//用户Id
 
 //获取配置信息
 +(Config *)getConfig;

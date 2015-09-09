@@ -761,14 +761,23 @@
         }
         case SocketTypeRemoteIp:
         {
-            // todo
-            // 判断是否为ff 11 11 11 11, 如果是，则发送HouseId
-            // 如果为ok, 则表示连接成功
+            Byte *b = (Byte *)[data bytes];
+            for(int i = 0;i < [data length]; i++)
+                printf("b = %d\n", b[i]);
             
-            if (true) {
-                
-            } else {
-                
+            Byte bytes[] = {255,17,17,17,17,17};
+            NSData *d = [[NSData alloc] initWithBytes:bytes length:6];
+            
+            Byte okBytes[] = {111, 107};
+            NSData *okData = [[NSData alloc] initWithBytes:okBytes length:2];
+            
+            if ([data isEqualToData: d]) {
+                Config *config = [Config getConfig];
+                [sock writeData:[config.userId hexToBytes] withTimeout:-1 tag:-1];
+            } else if ([data isEqualToData: okData]) {
+                if (!isRemoteIpConnected_) {
+                    isRemoteIpConnected_ = true;
+                }
             }
 
             [sock readDataWithTimeout:-1 tag:-1];
