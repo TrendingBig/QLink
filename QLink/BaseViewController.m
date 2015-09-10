@@ -777,6 +777,9 @@
             } else if ([data isEqualToData: okData]) {
                 if (!isRemoteIpConnected_) {
                     isRemoteIpConnected_ = true;
+                    
+                    data = [sendContent_ hexToBytes];
+                    [sock writeData:data withTimeout:-1 tag:-1];
                 }
             }
 
